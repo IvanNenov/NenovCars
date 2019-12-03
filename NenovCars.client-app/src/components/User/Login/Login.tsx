@@ -2,15 +2,24 @@ import * as React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 import AuthService from '../../../services/Auth/AuthService';
 import IUserLogin from '../interfaces/IUserLogin';
+import { RouteComponentProps } from 'react-router-dom';
+import { Col, Row } from 'antd';
+import { inject, observer } from 'mobx-react';
+import { IUserStore } from '../../../stores/UserStore/UserStore';
 
-interface LoginProps {}
+
+interface LoginProps {
+    userStore?: IUserStore;
+}
 
 interface LoginState {
     username: string;
     password: string;
 }
 
-export default class Login extends React.Component<LoginProps, LoginState> {
+@inject('userStore')
+@observer
+export default class Login extends React.Component<LoginProps & RouteComponentProps, LoginState> {
     public state: LoginState = {
         username: '',
         password: ''
@@ -25,7 +34,11 @@ export default class Login extends React.Component<LoginProps, LoginState> {
                 password: this.state.password
             }
 
-            await authService.login(userBody);
+            let isLogged = await authService.login(userBody);
+
+            if (isLogged) {
+                this.props.history.push('/home');
+            }
         }
     }
 
@@ -42,27 +55,33 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     }
 
     public render(): JSX.Element {
+        console.log('LoginComponent render');
         return (
-            <Form className="login-form">
-                <Form.Item>
-                    <Input
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.usernameInputChange(event)}
-                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        placeholder="Username"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Input
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.passwordInputChange(event)}
-                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        type="password"
-                        placeholder="Password"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()} className="login-form-button">Log in</Button>
-                </Form.Item>
-            </Form>
+
+            <Row type="flex" justify="center">
+                <Col>
+                    <Form className="login-form">
+                        <Form.Item>
+                            <Input
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.usernameInputChange(event)}
+                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                placeholder="Username"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Input
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.passwordInputChange(event)}
+                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                type="password"
+                                placeholder="Password"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()} className="login-form-button">Log in</Button>
+                        </Form.Item>
+                    </Form>
+                </Col>
+            </Row>
         );
     }
 }

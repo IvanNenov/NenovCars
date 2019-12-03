@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './components/App';
-import { Route, BrowserRouter as Router } from 'react-router-dom'
-import SignUp from './components/User/SignUp';
+import './index.css';
 import '../node_modules/antd/dist/antd.css';
-import CarAd from './components/CarAd/CarAd';
+import { Provider } from 'mobx-react';
+import { stores } from './stores/StoresContainer';
+import { BrowserRouter as Router } from 'react-router-dom'
 
-const routing = (
-    <Router>
-        <div>
-            <Route exact path="/" component={App} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/addCar" component={CarAd} />
-        </div>
-    </Router>
-)
-
-ReactDOM.render(routing, document.getElementById('root'));
+ReactDOM.render(
+    <Provider {...stores}>
+        <Router>
+            <App />
+        </Router>
+    </Provider>,
+    document.getElementById('root'));

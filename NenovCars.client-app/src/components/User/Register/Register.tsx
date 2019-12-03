@@ -2,6 +2,7 @@ import * as React from 'react';
 import AuthService from '../../../services/Auth/AuthService';
 import { Form, Icon, Input, Button } from 'antd';
 import IUserRegister from '../interfaces/IUserRegister';
+import { Col, Row } from 'antd';
 
 interface RegisterState {
     username: string;
@@ -10,7 +11,7 @@ interface RegisterState {
     email: string
 }
 
-interface RegisterProps {}
+interface RegisterProps { }
 
 export default class Register extends React.Component<RegisterProps, RegisterState> {
     public state: RegisterState = {
@@ -59,41 +60,45 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
 
     public render(): JSX.Element {
         return (
-            <Form className="login-form">
-                <Form.Item>
-                    <Input
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.nameInputChange(event)}
-                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        placeholder="Username"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Input
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.emailInputChange(event)}
-                        prefix={<Icon type="email" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        placeholder="Email"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Input
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.passwordInputChange(event)}
-                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        type="password"
-                        placeholder="Password"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Input
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.confirmPasswordnputChange(event)}
-                        prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        type="password"
-                        placeholder="Confirm Password"
-                    />
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()} className="login-form-button">Register</Button>
-                </Form.Item>
-            </Form>
+            <Row type="flex" justify="center">
+                <Col>
+                    <Form className="login-form">
+                        <Form.Item>
+                            <Input
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.nameInputChange(event)}
+                                prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                placeholder="Username"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Input
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.emailInputChange(event)}
+                                prefix={<Icon type="email" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                placeholder="Email"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Input
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.passwordInputChange(event)}
+                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                type="password"
+                                placeholder="Password"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Input
+                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.confirmPasswordnputChange(event)}
+                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                type="password"
+                                placeholder="Confirm Password"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Button type="primary" onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()} className="login-form-button">Register</Button>
+                        </Form.Item>
+                    </Form>
+                </Col>
+            </Row>
         );
     }
 }
