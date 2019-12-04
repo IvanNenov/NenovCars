@@ -6,6 +6,7 @@ const { Option } = Select;
 
 export interface ICarAdInput {
     carBrand: string;
+    carImage: string;
     carModel: string;
     hp: string;
     fuel: string;
@@ -13,6 +14,7 @@ export interface ICarAdInput {
 
 interface CarAddState {
     carBrand: string;
+    carImage: string;
     carModel: string;
     hp: string;
     fuel: string;
@@ -21,6 +23,7 @@ interface CarAddState {
 export default class CarAd extends React.Component<any, CarAddState> {
     public state: CarAddState = {
         carBrand: '',
+        carImage: '',
         carModel: '',
         hp: '',
         fuel: ''
@@ -50,10 +53,17 @@ export default class CarAd extends React.Component<any, CarAddState> {
         });
     }
 
+    private onImageChane(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.setState({
+            carImage: event.currentTarget.value
+        });
+    }
+
     private async handleSubmit(): Promise<void> {
          let carService = new CarService();
-        if (this.state.hp !== '' && this.state.fuel !== '' && this.state.carModel !== '' && this.state.carBrand !== '') {
+        if (this.state.hp !== '' && this.state.carImage !== '' && this.state.fuel !== '' && this.state.carModel !== '' && this.state.carBrand !== '') {
             let ad: ICarAdInput = {
+                carImage: this.state.carImage,
                 carBrand: this.state.carBrand,
                 hp: this.state.hp,
                 fuel: this.state.fuel,
@@ -89,6 +99,12 @@ export default class CarAd extends React.Component<any, CarAddState> {
                     <Input
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onFuelChange(event)}
                         placeholder="Fuel"
+                    />
+                </Form.Item>
+                <Form.Item>
+                    <Input
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onImageChane(event)}
+                        placeholder="Image url"
                     />
                 </Form.Item>
                 <Form.Item>
