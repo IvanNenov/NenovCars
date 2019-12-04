@@ -44,6 +44,7 @@ namespace WebApiAuth.Services
             {
                 Brand = model.CarBrand,
                 Model = model.CarModel,
+                ImageUrl = model.ImageUrl,
                 Fuel = model.Fuel,
                 Hp = model.Hp,
                 ApplicationUserId = currentUserObject,
@@ -59,6 +60,7 @@ namespace WebApiAuth.Services
             var listOfAllCars = this.context.Cars.Select(x => new AllCars
             {
                 Id = x.Id,
+                ImageUrl = x.ImageUrl,
                 Brand = x.Brand,
                 Fuel = x.Fuel,
                 Hp = x.Hp,
@@ -86,6 +88,7 @@ namespace WebApiAuth.Services
                 var favoriteCars = new GetFavoriteCarsViewModel();
 
                 favoriteCars.Id = car.Id;
+                favoriteCars.ImageUrl = car.ImageUrl,
                 favoriteCars.Brand = car.Brand;
                 favoriteCars.Fuel = car.Fuel;
                 favoriteCars.Hp = car.Hp;
