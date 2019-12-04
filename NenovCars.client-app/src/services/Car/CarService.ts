@@ -2,6 +2,7 @@ import Axios from 'axios';
 import { ICarAdInput } from '../../components/CarAd/CarAd';
 
 export default class CarService {
+    
 
     public async addCar(carAd: ICarAdInput): Promise<void> {
         try {

@@ -2,6 +2,7 @@ import * as React from 'react';
 import AuthService from '../../../services/Auth/AuthService';
 import { Form, Icon, Input, Button } from 'antd';
 import IUserRegister from '../interfaces/IUserRegister';
+import { RouteComponentProps } from 'react-router-dom'
 import { Col, Row } from 'antd';
 
 interface RegisterState {
@@ -13,7 +14,7 @@ interface RegisterState {
 
 interface RegisterProps { }
 
-export default class Register extends React.Component<RegisterProps, RegisterState> {
+export default class Register extends React.Component<RegisterProps & RouteComponentProps, RegisterState> {
     public state: RegisterState = {
         username: '',
         password: '',
@@ -30,7 +31,11 @@ export default class Register extends React.Component<RegisterProps, RegisterSta
                 email: this.state.email
             };
 
-            await authService.register(userBody);
+            let isRegisterSucceeded = await authService.register(userBody);
+
+            if (isRegisterSucceeded) {
+                this.props.history.push('/login');
+            }
         }
     }
 

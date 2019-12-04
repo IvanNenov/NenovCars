@@ -37,7 +37,7 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
             let isLogged = await authService.login(userBody);
 
             if (isLogged) {
-                this.props.history.push('/home');
+                this.props.history.push('/');
             }
         }
     }

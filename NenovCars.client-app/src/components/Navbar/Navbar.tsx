@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Layout, Button, Menu } from 'antd';
 import { IUserStore } from '../../stores/UserStore/UserStore';
 import { inject, observer } from 'mobx-react';
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 
 const { Header } = Layout;
 
@@ -11,14 +12,20 @@ interface NavbarProps {
 }
 
 interface NavbarState {
-    isLoggedIn: boolean; 
+    isLoggedIn: boolean;
 }
 
 @inject('userStore')
 @observer
-export default class Navbar extends React.Component<NavbarProps, NavbarState> {
+class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarState> {
     public state: NavbarState = {
         isLoggedIn: this.props.userStore.isUserAuthenticated
+    }
+
+    private logout(): void {
+        this.props.userStore.logout();
+
+        this.props.history.push('/');
     }
 
     public render(): JSX.Element {
@@ -29,9 +36,11 @@ export default class Navbar extends React.Component<NavbarProps, NavbarState> {
                         <Button type="primary" href="/login">Login</Button>
                         <Button type="primary" href="/register">Register</Button>
                     </>
-                ) : <Button type="primary" href="/logout">Logout</Button>}
+                ) : <Button type="primary" onClick={(): void => this.logout()}>Logout</Button>}
                 <Button type="primary" href="/addCar">Add Car</Button>
             </Header>
         );
     }
 }
+
+export default withRouter(Navbar)

@@ -28,9 +28,9 @@ export default class App extends React.Component<AppProps, AppState> {
 		return (
 			<div className="root">
 				<Layout>
-					<Navbar isLoggedIn={this.props.userStore.isUserAuthenticated} />
+					<Navbar isLoggedIn={this.state.isUserAuthenticated} />
 					<Switch>
-						<Route path='/home' component={Home} />
+						<Route exact path='/' component={Home} />
 						<Route path='/login' component={Login} />
 						<Route path='/register' component={Register} />
 						<Route path='/addCar' component={AddCar} />

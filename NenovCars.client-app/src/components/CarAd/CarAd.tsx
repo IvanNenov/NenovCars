@@ -1,12 +1,10 @@
 import React from 'react'
-import { Form, Icon, Input, Button, Select, InputNumber } from 'antd';
+import { Form, Input, Button, Select } from 'antd';
 import CarService from '../../services/Car/CarService';
-
-const { Option } = Select;
 
 export interface ICarAdInput {
     carBrand: string;
-    carImage: string;
+    imageUrl: string;
     carModel: string;
     hp: string;
     fuel: string;
@@ -63,7 +61,7 @@ export default class CarAd extends React.Component<any, CarAddState> {
          let carService = new CarService();
         if (this.state.hp !== '' && this.state.carImage !== '' && this.state.fuel !== '' && this.state.carModel !== '' && this.state.carBrand !== '') {
             let ad: ICarAdInput = {
-                carImage: this.state.carImage,
+                imageUrl: this.state.carImage,
                 carBrand: this.state.carBrand,
                 hp: this.state.hp,
                 fuel: this.state.fuel,

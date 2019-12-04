@@ -20,7 +20,8 @@
     "experimentalDecorators": true,
     "removeComments": true,
     "noImplicitAny": true,
-    "noImplicitUseStrict": true
+    "noImplicitUseStrict": true,
+    "strict": false
   },
   "include": [
     "src"

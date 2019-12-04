@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AdsContainer from '../AdsContainer/AdsContainer';
 
 interface HomeProps {
 
@@ -12,9 +13,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     public render() {
         return (
             <div>
-                <h1>
-                    Home page goes here
-                 </h1>
+                <AdsContainer />
             </div>
         );
     }
