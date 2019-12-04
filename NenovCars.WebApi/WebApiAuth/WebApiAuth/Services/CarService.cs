@@ -54,6 +54,20 @@ namespace WebApiAuth.Services
             this.context.SaveChanges();
         }
 
+        public IEnumerable<AllCars> GetAll()
+        {
+            var listOfAllCars = this.context.Cars.Select(x => new AllCars
+            {
+                Id = x.Id,
+                Brand = x.Brand,
+                Fuel = x.Fuel,
+                Hp = x.Hp,
+                Model = x.Model
+            });
+
+            return listOfAllCars;
+        }
+
         public IEnumerable<GetFavoriteCarsViewModel> GetFavoriteCars()
         {
             var currentUser = this.accessor.HttpContext.User.Identity.Name;

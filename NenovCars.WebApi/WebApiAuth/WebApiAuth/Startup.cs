@@ -53,7 +53,7 @@ namespace WebApiAuth
             {
                 options.AddPolicy("default", policy =>
                 {
-                    //policy.WithOrigins("http://localhost:3000")
+                  
                     policy.WithOrigins(Configuration["ApplicationSettings:Client_URL"])
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
@@ -98,8 +98,8 @@ namespace WebApiAuth
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            var rolesMiddleware = new RolesSeedMiddleware();
-            rolesMiddleware.SeedRoles(roleManager);
+            //var rolesMiddleware = new RolesSeedMiddleware();
+            //rolesMiddleware.SeedRoles(roleManager);
             app.UseMvc();
         }
     }

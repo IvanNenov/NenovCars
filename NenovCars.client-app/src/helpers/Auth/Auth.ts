@@ -12,4 +12,4 @@ export default class Auth {
     public static getAuthToken(): string | null {
         return localStorage.getItem('token');
     }
-}
+} 

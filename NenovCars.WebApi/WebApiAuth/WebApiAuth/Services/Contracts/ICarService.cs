@@ -14,5 +14,7 @@ namespace WebApiAuth.Services.Contracts
         bool TryAddToFavorite(string id);
 
         IEnumerable<GetFavoriteCarsViewModel> GetFavoriteCars();
+
+        IEnumerable<AllCars> GetAll();
     }
 }
