@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WebApiAuth.ViewModels.User
 {
     public class ListOfFavoriteCars
     {
-        public IEnumerable<GetFavoriteCarsViewModel> FavoriteJobsAds { get; set; }
+        public IEnumerable<GetFavoriteCarsViewModel> FavoriteCarAds { get; set; }
 
         public double TotalPagesCount { get; set; }
 

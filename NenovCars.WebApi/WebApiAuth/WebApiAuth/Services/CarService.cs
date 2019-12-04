@@ -55,9 +55,9 @@ namespace WebApiAuth.Services
             this.context.SaveChanges();
         }
 
-        public IEnumerable<AllCars> GetAll()
+        public IEnumerable<CarViewModel> GetAll()
         {
-            var listOfAllCars = this.context.Cars.Select(x => new AllCars
+            var listOfAllCars = this.context.Cars.Select(x => new CarViewModel
             {
                 Id = x.Id,
                 ImageUrl = x.ImageUrl,

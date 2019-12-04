@@ -15,6 +15,6 @@ namespace WebApiAuth.Services.Contracts
 
         IEnumerable<GetFavoriteCarsViewModel> GetFavoriteCars();
 
-        IEnumerable<AllCars> GetAll();
+        IEnumerable<CarViewModel> GetAll();
     }
 }

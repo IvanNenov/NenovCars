@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApiAuth.ViewModels.Car
+﻿namespace WebApiAuth.ViewModels.Car
 {
-    public class AllCars
+    public class CarViewModel
     {
         public string Id { get; set; }
         public string Brand { get; set; }

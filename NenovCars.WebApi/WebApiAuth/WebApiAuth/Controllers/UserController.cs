@@ -23,8 +23,7 @@ namespace WebApiAuth.Controllers
             this.userManager = userManager;
         }
 
-        [HttpPost]
-        [Route("Register")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Register(ApplicationUserRegisterModel model)
         {
             var applicationUser = new ApplicationUser()
@@ -49,8 +48,7 @@ namespace WebApiAuth.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Login(ApplicationUserLoginModel model)
         {
             var user = await this.userManager.FindByNameAsync(model.UserName);

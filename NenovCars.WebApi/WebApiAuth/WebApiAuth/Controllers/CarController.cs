@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WebApiAuth.Data.Models;
 using WebApiAuth.Services.Contracts;
 using WebApiAuth.ViewModels.Car;
 using WebApiAuth.ViewModels.User;
@@ -15,11 +14,13 @@ namespace WebApiAuth.Controllers
     public class CarController : ControllerBase
     {
         private readonly ICarService _carService;
+
         public CarController(ICarService carService)
         {
             this._carService = carService;
         }
 
+        //[Authorize]
         [HttpPost("[action]")]
         public ActionResult AddCar([FromBody] AddCarViewModel carAd)
         {
@@ -33,6 +34,50 @@ namespace WebApiAuth.Controllers
             return this.Ok();
         }
 
+        //[Authorize]
+        [AllowAnonymous]
+        [HttpGet("[action]/{currentPage}")]
+        public ActionResult GetAllCars(string currentPage)
+        {
+            ICollection<CarViewModel> allCars = new List<CarViewModel>();
+
+            if (string.IsNullOrWhiteSpace(currentPage))
+            {
+                return this.BadRequest();
+            }
+
+            var isValidPage = int.TryParse(currentPage, out int page);
+            if (!isValidPage)
+            {
+                page = 1;
+            }
+
+            var pageSize = 5;
+            var skip = (page - 1) * pageSize;
+
+            double totalPageCount;
+
+            allCars = this._carService
+                .GetAll()
+                .Skip(skip)
+                .Take(pageSize)
+                //.OrderByDescending(x => x.CreatedOn)
+                .ToList();
+
+            totalPageCount = Math.Ceiling((double)this._carService.GetAll().Count() / pageSize);
+
+            var viewModel = new ListOfAllCarsViewModel
+            {
+                AllCars = allCars,
+                CurrentPage = page.ToString(),
+                PageSize = pageSize.ToString(),
+                TotalPagesCount = totalPageCount.ToString(),
+            };
+
+            return this.Ok(viewModel);
+        }
+
+        [HttpGet]
         public ActionResult FavoriteJobs(int? currentPage)
         {
             var allCars = new List<GetFavoriteCarsViewModel>();
@@ -53,7 +98,7 @@ namespace WebApiAuth.Controllers
 
             var viewModel = new ListOfFavoriteCars()
             {
-                FavoriteJobsAds = allCars,
+                FavoriteCarAds = allCars,
                 CurrentPage = page,
                 PageSize = pageSize,
                 TotalPagesCount = totalPageCount,
