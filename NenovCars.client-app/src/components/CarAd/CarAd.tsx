@@ -53,7 +53,7 @@ export default class CarAd extends React.Component<any, CarAddState> {
         });
     }
 
-    private onImageChane(event: React.ChangeEvent<HTMLInputElement>): void {
+    private onImageChange(event: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({
             carImage: event.currentTarget.value
         });
@@ -103,7 +103,7 @@ export default class CarAd extends React.Component<any, CarAddState> {
                 </Form.Item>
                 <Form.Item>
                     <Input
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onImageChane(event)}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onImageChange(event)}
                         placeholder="Image url"
                     />
                 </Form.Item>

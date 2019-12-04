@@ -33,7 +33,7 @@ export default class App extends React.Component<AppProps, AppState> {
 						<Route path='/home' component={Home} />
 						<Route path='/login' component={Login} />
 						<Route path='/register' component={Register} />
-						<Route path='/addcar' component={AddCar}></Route>
+						<Route path='/addCar' component={AddCar} />
 					</Switch>
 				</Layout>
 			</div>

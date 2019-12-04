@@ -88,7 +88,7 @@ namespace WebApiAuth.Services
                 var favoriteCars = new GetFavoriteCarsViewModel();
 
                 favoriteCars.Id = car.Id;
-                favoriteCars.ImageUrl = car.ImageUrl,
+                favoriteCars.ImageUrl = car.ImageUrl;
                 favoriteCars.Brand = car.Brand;
                 favoriteCars.Fuel = car.Fuel;
                 favoriteCars.Hp = car.Hp;
