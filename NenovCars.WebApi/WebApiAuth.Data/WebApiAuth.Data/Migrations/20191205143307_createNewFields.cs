@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApiAuth.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class createNewFields : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -159,10 +159,20 @@ namespace WebApiAuth.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
+                    AdTitle = table.Column<string>(nullable: true),
+                    YearOfProduction = table.Column<string>(nullable: true),
+                    Color = table.Column<string>(nullable: true),
+                    Transmission = table.Column<int>(nullable: false),
+                    VehicleType = table.Column<int>(nullable: false),
+                    Price = table.Column<double>(nullable: false),
+                    Kilometre = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     Brand = table.Column<string>(nullable: true),
+                    ImageUrl = table.Column<string>(nullable: true),
                     Model = table.Column<string>(nullable: true),
                     Hp = table.Column<string>(nullable: true),
-                    Fuel = table.Column<string>(nullable: true),
+                    Fuel = table.Column<int>(nullable: false),
                     ApplicationUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

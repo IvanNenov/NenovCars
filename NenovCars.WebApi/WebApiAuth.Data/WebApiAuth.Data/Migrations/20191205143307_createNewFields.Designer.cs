@@ -9,8 +9,8 @@ using WebApiAuth.Data;
 namespace WebApiAuth.Data.Migrations
 {
     [DbContext(typeof(WebApiAuthDbContext))]
-    [Migration("20191202125237_initial")]
-    partial class initial
+    [Migration("20191205143307_createNewFields")]
+    partial class createNewFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,15 +189,35 @@ namespace WebApiAuth.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AdTitle");
+
                     b.Property<string>("ApplicationUserId");
 
                     b.Property<string>("Brand");
 
-                    b.Property<string>("Fuel");
+                    b.Property<string>("Color");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("Fuel");
 
                     b.Property<string>("Hp");
 
+                    b.Property<string>("ImageUrl");
+
+                    b.Property<int>("Kilometre");
+
                     b.Property<string>("Model");
+
+                    b.Property<double>("Price");
+
+                    b.Property<int>("Transmission");
+
+                    b.Property<int>("VehicleType");
+
+                    b.Property<string>("YearOfProduction");
 
                     b.HasKey("Id");
 

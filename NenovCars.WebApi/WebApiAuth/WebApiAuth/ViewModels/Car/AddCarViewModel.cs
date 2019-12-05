@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiAuth.Data.Models.Enums;
 
 namespace WebApiAuth.ViewModels.Car
 {
@@ -11,6 +12,6 @@ namespace WebApiAuth.ViewModels.Car
         public string ImageUrl { get; set; }
         public string CarModel { get; set; }
         public string Hp { get; set; }
-        public string Fuel { get; set; }
+        public Fuel Fuel { get; set; }
     }
 }

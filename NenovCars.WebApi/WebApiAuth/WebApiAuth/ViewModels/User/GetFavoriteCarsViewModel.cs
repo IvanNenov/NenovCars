@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiAuth.Data.Models.Enums;
 
 namespace WebApiAuth.ViewModels.User
 {
@@ -16,6 +17,6 @@ namespace WebApiAuth.ViewModels.User
 
         public string Hp { get; set; }
 
-        public string Fuel { get; set; }
+        public Fuel Fuel { get; set; }
     }
 }

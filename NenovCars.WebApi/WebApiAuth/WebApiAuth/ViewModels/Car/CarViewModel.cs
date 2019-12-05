@@ -1,4 +1,6 @@
-﻿namespace WebApiAuth.ViewModels.Car
+﻿using WebApiAuth.Data.Models.Enums;
+
+namespace WebApiAuth.ViewModels.Car
 {
     public class CarViewModel
     {
@@ -11,6 +13,6 @@
 
         public string Hp { get; set; }
 
-        public string Fuel { get; set; }
+        public Fuel Fuel { get; set; }
     }
 }
