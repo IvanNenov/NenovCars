@@ -33,6 +33,7 @@ namespace WebApiAuth.Services
             this.context = context;
             this.accessor = accessor;
         }
+
         public void CreateCar(AddCarViewModel model)
         {
             //var currentUserName = this.accessor.HttpContext.User.Identity.Name;
@@ -55,9 +56,14 @@ namespace WebApiAuth.Services
             this.context.SaveChanges();
         }
 
-        public IEnumerable<CarViewModel> GetAll()
+        public int GetAdsCount()
         {
-            var listOfAllCars = this.context.Cars.Select(x => new CarViewModel
+            return this.context.Cars.Count();
+        }
+
+        public async Task<ICollection<CarViewModel>> GetAll(int toSkip, int pageSize)
+        {
+            var listOfAllCars = await this.context.Cars.Select(x => new CarViewModel
             {
                 Id = x.Id,
                 ImageUrl = x.ImageUrl,
@@ -65,7 +71,9 @@ namespace WebApiAuth.Services
                 Fuel = x.Fuel,
                 Hp = x.Hp,
                 Model = x.Model
-            });
+            }).Skip(toSkip)
+                .Take(pageSize)
+                .ToListAsync();
 
             return listOfAllCars;
         }

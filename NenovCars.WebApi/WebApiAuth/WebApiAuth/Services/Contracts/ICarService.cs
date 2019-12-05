@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApiAuth.ViewModels.Car;
-using WebApiAuth.ViewModels.User;
-
-namespace WebApiAuth.Services.Contracts
+﻿namespace WebApiAuth.Services.Contracts
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using WebApiAuth.ViewModels.Car;
+    using WebApiAuth.ViewModels.User;
+
     public interface ICarService
     {
         void CreateCar(AddCarViewModel model);
@@ -15,6 +13,8 @@ namespace WebApiAuth.Services.Contracts
 
         IEnumerable<GetFavoriteCarsViewModel> GetFavoriteCars();
 
-        IEnumerable<CarViewModel> GetAll();
+        Task<ICollection<CarViewModel>> GetAll(int toSkip, int pageSize);
+
+        int GetAdsCount();
     }
 }

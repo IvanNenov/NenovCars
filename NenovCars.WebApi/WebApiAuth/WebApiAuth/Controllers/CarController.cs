@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using WebApiAuth.Services.Contracts;
-using WebApiAuth.ViewModels.Car;
-using WebApiAuth.ViewModels.User;
-
-namespace WebApiAuth.Controllers
+﻿namespace WebApiAuth.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using WebApiAuth.Services.Contracts;
+    using WebApiAuth.ViewModels.Car;
+    using WebApiAuth.ViewModels.User;
+
     [Route("api/[controller]")]
     [ApiController]
     public class CarController : ControllerBase
@@ -20,7 +21,7 @@ namespace WebApiAuth.Controllers
             this._carService = carService;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost("[action]")]
         public ActionResult AddCar([FromBody] AddCarViewModel carAd)
         {
@@ -34,10 +35,9 @@ namespace WebApiAuth.Controllers
             return this.Ok();
         }
 
-        //[Authorize]
         [AllowAnonymous]
         [HttpGet("[action]/{currentPage}")]
-        public ActionResult GetAllCars(string currentPage)
+        public async Task<ActionResult> GetAllCars(string currentPage)
         {
             ICollection<CarViewModel> allCars = new List<CarViewModel>();
 
@@ -57,14 +57,9 @@ namespace WebApiAuth.Controllers
 
             double totalPageCount;
 
-            allCars = this._carService
-                .GetAll()
-                .Skip(skip)
-                .Take(pageSize)
-                //.OrderByDescending(x => x.CreatedOn)
-                .ToList();
+            allCars = await this._carService.GetAll(skip, pageSize);
 
-            totalPageCount = Math.Ceiling((double)this._carService.GetAll().Count() / pageSize);
+            totalPageCount = Math.Ceiling((double)this._carService.GetAdsCount() / pageSize);
 
             var viewModel = new ListOfAllCarsViewModel
             {

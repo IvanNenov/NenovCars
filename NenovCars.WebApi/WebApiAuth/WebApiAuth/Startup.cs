@@ -11,7 +11,6 @@ using System;
 using System.Text;
 using WebApiAuth.Data;
 using WebApiAuth.Data.Models.User;
-using WebApiAuth.Middlewares;
 using WebApiAuth.Services;
 using WebApiAuth.Services.Contracts;
 
@@ -53,7 +52,6 @@ namespace WebApiAuth
             {
                 options.AddPolicy("default", policy =>
                 {
-                  
                     policy.WithOrigins(Configuration["ApplicationSettings:Client_URL"])
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
@@ -72,7 +70,7 @@ namespace WebApiAuth
             .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
-                x.SaveToken = false;
+                x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -100,6 +98,7 @@ namespace WebApiAuth
             }
             //var rolesMiddleware = new RolesSeedMiddleware();
             //rolesMiddleware.SeedRoles(roleManager);
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
