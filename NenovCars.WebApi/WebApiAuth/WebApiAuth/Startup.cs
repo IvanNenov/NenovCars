@@ -50,6 +50,11 @@ namespace WebApiAuth
 
             services.AddCors(options =>
             {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000");
+                });
+
                 options.AddPolicy("default", policy =>
                 {
                     policy.WithOrigins(Configuration["ApplicationSettings:Client_URL"])

@@ -5,14 +5,13 @@ export default class AdService {
     public async getAllCars(page: string): Promise<IAllCarsContainer> {
         let viewModel: IAllCarsContainer; 
         try {
-           let result = await Axios.get('api/car/GetAllCars/' + page)
+           let result = await Axios.get('api/car/GetAllCars/' + page);
 
            viewModel = result.data;
-
         } catch (error) {
             console.log(error);
         }
 
         return viewModel;
     }  
-} 
+}  
