@@ -8,7 +8,8 @@ export default class CarService {
     public async addCar(carAd: ICarAdInput): Promise<boolean> {
         let config = {
             headers: {
-                'Authorization': `Bearer ${Auth.getAuthToken()}`
+                'Authorization': `Bearer ${Auth.getAuthToken()}`,
+                'UserId': `${Auth.getCurrentUserId()}`
             }
         }
 

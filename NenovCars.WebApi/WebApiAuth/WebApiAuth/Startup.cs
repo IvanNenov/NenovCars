@@ -11,6 +11,7 @@ using System;
 using System.Text;
 using WebApiAuth.Data;
 using WebApiAuth.Data.Models.User;
+using WebApiAuth.Middlewares;
 using WebApiAuth.Services;
 using WebApiAuth.Services.Contracts;
 
@@ -101,8 +102,8 @@ namespace WebApiAuth
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            //var rolesMiddleware = new RolesSeedMiddleware();
-            //rolesMiddleware.SeedRoles(roleManager);
+            var rolesMiddleware = new RolesSeedMiddleware();
+            rolesMiddleware.SeedRoles(roleManager);
             app.UseAuthentication();
             app.UseMvc();
         }

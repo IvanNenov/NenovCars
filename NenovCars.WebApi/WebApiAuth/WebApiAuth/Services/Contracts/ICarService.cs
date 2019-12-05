@@ -7,7 +7,7 @@
 
     public interface ICarService
     {
-        void CreateCar(AddCarViewModel model);
+        void CreateCar(AddCarViewModel model, string userId);
 
         bool TryAddToFavorite(string id);
 

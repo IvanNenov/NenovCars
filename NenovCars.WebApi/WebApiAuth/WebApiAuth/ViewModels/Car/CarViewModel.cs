@@ -13,6 +13,22 @@ namespace WebApiAuth.ViewModels.Car
 
         public string Hp { get; set; }
 
-        public Fuel Fuel { get; set; }
+        public string Fuel { get; set; }
+
+        public string AdTitle { get; set; }
+
+        public string YearOfProduction { get; set; }
+
+        public string Color { get; set; }
+
+        public string Transmission { get; set; }
+
+        public string VehicleType { get; set; }
+
+        public double Price { get; set; }
+
+        public int Kilometre { get; set; }
+
+        public string Description { get; set; }
     }
 }

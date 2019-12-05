@@ -73,8 +73,10 @@ namespace WebApiAuth.Controllers
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
+                var userId = user.Id;
+                var username = user.UserName;
 
-                return Ok(new { token });
+                return Ok(new { token, userId, username });
             }
             else
             {

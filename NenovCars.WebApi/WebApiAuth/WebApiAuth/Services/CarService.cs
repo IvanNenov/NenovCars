@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApiAuth.Data;
 using WebApiAuth.Data.Models;
+using WebApiAuth.Data.Models.Enums;
 using WebApiAuth.Data.Models.User;
 using WebApiAuth.Services.Contracts;
 using WebApiAuth.ViewModels.Car;
@@ -34,22 +35,32 @@ namespace WebApiAuth.Services
             this.accessor = accessor;
         }
 
-        public void CreateCar(AddCarViewModel model)
+        public void CreateCar(AddCarViewModel model, string userId)
         {
-            //var currentUserName = this.accessor.HttpContext.User.Identity.Name;
-            //var currentUserObject = this.context.Users.FirstOrDefault(x => x.UserName == currentUserName);
-            var currentUserName = "IvanNenov";
-            var currentUserObject = "f44eccc9-12c7-4426-b06c-c14a1f16fa8a";
-            var user = this.context.Users.FirstOrDefault(x => x.Id == currentUserObject);
+            var user = this.context.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
+
+            Enum.TryParse(model.Fuel, out Fuel fuel);
+            Enum.TryParse(model.Fuel, out Transmission transmission);
+            Enum.TryParse(model.Fuel, out VehicleType vehicleType);
+
             var car = new Car()
             {
                 Brand = model.CarBrand,
                 Model = model.CarModel,
                 ImageUrl = model.ImageUrl,
-                Fuel = model.Fuel,
+                Kilometre = model.Kilometre,
+                Transmission = transmission,
+                Color = model.Color,
+                VehicleType = vehicleType,
+                AdTitle = model.AdTitle,
+                CreatedOn = DateTime.UtcNow,
+                Description = model.Description,
+                Price = model.Price,
+                YearOfProduction = model.YearOfProduction,
+                Fuel = fuel,
                 Hp = model.Hp,
-                ApplicationUserId = currentUserObject,
-                CarOwner = (ApplicationUser)user
+                ApplicationUserId = user.Id,
+                CarOwner = user
             };
 
             this.context.Cars.Add(car);
@@ -68,9 +79,17 @@ namespace WebApiAuth.Services
                 Id = x.Id,
                 ImageUrl = x.ImageUrl,
                 Brand = x.Brand,
-                Fuel = x.Fuel,
+                Fuel = x.Fuel.ToString(),
                 Hp = x.Hp,
-                Model = x.Model
+                Model = x.Model,
+                AdTitle = x.AdTitle,
+                Color = x.Color,
+                Description = x.Description,
+                Kilometre = x.Kilometre,
+                Price = x.Price,
+                Transmission = x.Transmission.ToString(),
+                VehicleType = x.VehicleType.ToString(),
+                YearOfProduction = x.YearOfProduction
             }).Skip(toSkip)
                 .Take(pageSize)
                 .ToListAsync();

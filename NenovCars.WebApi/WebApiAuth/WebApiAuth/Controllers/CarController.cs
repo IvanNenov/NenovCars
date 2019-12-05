@@ -25,7 +25,13 @@
         [HttpPost("[action]")]
         public ActionResult AddCar([FromBody] AddCarViewModel carAd)
         {
-            this._carService.CreateCar(carAd);
+            var username = this.Request.Headers["UserId"];
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return this.Unauthorized();
+            }
+
+            this._carService.CreateCar(carAd, username);
             return this.Ok();
         }
 

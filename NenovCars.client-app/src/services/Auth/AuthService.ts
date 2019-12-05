@@ -8,6 +8,8 @@ export default class AuthService {
         let isUserAuthenticated = Auth.isUserAuthenticated();
         if (isUserAuthenticated) {
             localStorage.removeItem('token');
+            localStorage.removeItem('Username');
+            localStorage.removeItem('UserId');
         }
     }
 
@@ -31,10 +33,17 @@ export default class AuthService {
         try {
             let result = await Axios.post('api/User/Login', user);
 
-            let tokenResult = result.data;
+            let userClaims = result.data;
 
-            if (tokenResult) {
-                localStorage.setItem('token', tokenResult.token);
+            let userId = userClaims.userId;
+            let username = userClaims.username;
+            let token = userClaims.token;
+
+            if (token) {
+                localStorage.setItem('token', token);
+                localStorage.setItem('Username', username);
+                localStorage.setItem('UserId', userId);
+
                 isLogged = true;
             } else {
                 isLogged = false;
