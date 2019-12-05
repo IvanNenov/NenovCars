@@ -1,10 +1,20 @@
 import React from 'react'
-import { Form, Input, Button, Select } from 'antd';
+import { Form, Input, Button } from 'antd';
 import CarService from '../../services/Car/CarService';
+import { RouteComponentProps, withRouter } from 'react-router-dom'
+import Auth from '../../helpers/Auth/Auth';
 
 export interface ICarAdInput {
     carBrand: string;
     imageUrl: string;
+    carModel: string;
+    hp: string;
+    fuel: string;
+}
+
+interface CarAddProps {
+    carBrand: string;
+    carImage: string;
     carModel: string;
     hp: string;
     fuel: string;
@@ -18,7 +28,7 @@ interface CarAddState {
     fuel: string;
 }
 
-export default class CarAd extends React.Component<any, CarAddState> {
+class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddState> {
     public state: CarAddState = {
         carBrand: '',
         carImage: '',
@@ -27,10 +37,16 @@ export default class CarAd extends React.Component<any, CarAddState> {
         fuel: ''
     }
 
+    public componentDidMount(): void {
+        if (Auth.isUserAuthenticated() === false) {
+            this.props.history.push('/');
+        }
+    }
+
     public onFuelChange(event: React.ChangeEvent<HTMLInputElement>): void {
-       this.setState({
-           fuel: event.currentTarget.value
-       })
+        this.setState({
+            fuel: event.currentTarget.value
+        })
     }
 
     public onHpChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -58,7 +74,7 @@ export default class CarAd extends React.Component<any, CarAddState> {
     }
 
     private async handleSubmit(): Promise<void> {
-         let carService = new CarService();
+        let carService = new CarService();
         if (this.state.hp !== '' && this.state.carImage !== '' && this.state.fuel !== '' && this.state.carModel !== '' && this.state.carBrand !== '') {
             let ad: ICarAdInput = {
                 imageUrl: this.state.carImage,
@@ -68,14 +84,18 @@ export default class CarAd extends React.Component<any, CarAddState> {
                 carModel: this.state.carModel
             };
 
-            await carService.addCar(ad);
+            let isSuccessful = await carService.addCar(ad);
+
+            if (isSuccessful) {
+                this.props.history.push('/');
+            }
         }
     }
 
     public render() {
         return (
             <Form className="login-form">
-                 <Form.Item>
+                <Form.Item>
                     <Input
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.carBrandInputChange(event)}
                         placeholder="Car brand"
@@ -106,11 +126,13 @@ export default class CarAd extends React.Component<any, CarAddState> {
                     />
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" 
-                    onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()} 
-                    className="login-form-button">Add</Button>
+                    <Button type="primary"
+                        onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()}
+                        className="login-form-button">Add</Button>
                 </Form.Item>
             </Form>
         )
     }
 }
+
+export default withRouter(CarAd);

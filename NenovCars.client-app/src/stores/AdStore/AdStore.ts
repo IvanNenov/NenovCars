@@ -3,7 +3,7 @@ import AdService from '../../services/AdService/AdService';
 import { IAllCarsContainer } from '../../components/AdsContainer/interfaces/IAllCarsContainer';
 
 export interface IAdStore {
-    carsConteiner: IAllCarsContainer;
+    carsContainer: IAllCarsContainer;
 
     getAllCars(page: string): Promise<void>;
 }
@@ -11,7 +11,7 @@ export interface IAdStore {
 export class AdStore implements IAdStore {
     private _adService: AdService;
 
-    @observable public carsConteiner: IAllCarsContainer = null;
+    @observable public carsContainer: IAllCarsContainer = null;
 
     public constructor(adService: AdService) {
         this._adService = adService;
@@ -23,6 +23,6 @@ export class AdStore implements IAdStore {
 
     @action
     public async getAllCars(page: string): Promise<void> {
-        this.carsConteiner = await this._adService.getAllCars(page);
+        this.carsContainer = await this._adService.getAllCars(page);
     }
 }

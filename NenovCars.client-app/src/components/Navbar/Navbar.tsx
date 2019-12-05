@@ -8,7 +8,6 @@ const { Header } = Layout;
 
 interface NavbarProps {
     userStore?: IUserStore;
-    isLoggedIn: boolean;
 }
 
 interface NavbarState {
@@ -22,6 +21,12 @@ class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarSt
         isLoggedIn: this.props.userStore.isUserAuthenticated
     }
 
+    public componentDidMount(): void {
+        if (this.props.userStore.isUserAuthenticated) {
+            this.props.userStore.setIsUserAuthenticated(this.props.userStore.isUserAuthenticated);
+        }
+    }
+
     private logout(): void {
         this.props.userStore.logout();
 
@@ -31,13 +36,16 @@ class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarSt
     public render(): JSX.Element {
         return (
             <Header>
-                {!this.props.userStore.isUserAuthenticated ? (
+                {!this.props.userStore.isLoggedIn ? (
                     <>
                         <Button type="primary" href="/login">Login</Button>
                         <Button type="primary" href="/register">Register</Button>
                     </>
-                ) : <Button type="primary" onClick={(): void => this.logout()}>Logout</Button>}
-                <Button type="primary" href="/addCar">Add Car</Button>
+                ) : <>
+                        <Button type="primary" onClick={(): void => this.logout()}>Logout</Button>
+                        <Button type="primary" href="/addCar">Add Car</Button>
+                    </>}
+
             </Header>
         );
     }

@@ -28,7 +28,7 @@ export default class App extends React.Component<AppProps, AppState> {
 		return (
 			<div className="root">
 				<Layout>
-					<Navbar isLoggedIn={this.state.isUserAuthenticated} />
+					<Navbar />
 					<Switch>
 						<Route exact path='/' component={Home} />
 						<Route path='/login' component={Login} />

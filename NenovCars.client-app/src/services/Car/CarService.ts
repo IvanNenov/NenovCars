@@ -1,14 +1,27 @@
 import Axios from 'axios';
 import { ICarAdInput } from '../../components/CarAd/CarAd';
+import Auth from '../../helpers/Auth/Auth';
 
 export default class CarService {
-    
 
-    public async addCar(carAd: ICarAdInput): Promise<void> {
+
+    public async addCar(carAd: ICarAdInput): Promise<boolean> {
+        let config = {
+            headers: {
+                'Authorization': `Bearer ${Auth.getAuthToken()}`
+            }
+        }
+
+        let isSuccessfull: boolean = false;
+
         try {
-            await Axios.post('api/car/addCar', carAd)
+            let result = await Axios.post('api/car/addCar', carAd, config);
+
+            isSuccessfull = result.status === 200 ? true : false;
         } catch (error) {
             console.log(error)
         }
+
+        return isSuccessfull;
     }
 } 

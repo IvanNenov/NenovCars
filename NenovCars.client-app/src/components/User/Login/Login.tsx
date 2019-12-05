@@ -6,6 +6,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { Col, Row } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { IUserStore } from '../../../stores/UserStore/UserStore';
+import Auth from '../../../helpers/Auth/Auth';
 
 
 interface LoginProps {
@@ -24,6 +25,12 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
         username: '',
         password: ''
     };
+
+    public componentDidMount(): void {
+        if (Auth.isUserAuthenticated()) {
+            this.props.history.push('/');
+        }
+    }
 
     private async handleSubmit(): Promise<void> {
         let authService = new AuthService();

@@ -6,6 +6,7 @@ export interface IUserStore {
     isUserAuthenticated: boolean;
     isLoggedIn: boolean;
 
+    setIsUserAuthenticated(isLoggedIn: boolean): void
     logout(): void;
 }
 
@@ -23,16 +24,18 @@ export class UserStore implements IUserStore {
     }
 
     public logout(): void {
-        if(this.isUserAuthenticated) {
+        if (this.isUserAuthenticated) {
+            this.isLoggedIn = false;
             this._authService.logout();
         }
     }
 
     @computed
     public get isUserAuthenticated(): boolean {
-        let isLoggedIn = Auth.isUserAuthenticated();
-        this.isLoggedIn = isLoggedIn
+        return Auth.isUserAuthenticated();
+    }
 
-        return isLoggedIn
+    public setIsUserAuthenticated(isLoggedIn: boolean): void {
+        this.isLoggedIn = isLoggedIn;
     }
 }

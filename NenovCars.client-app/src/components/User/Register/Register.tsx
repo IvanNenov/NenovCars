@@ -4,6 +4,7 @@ import { Form, Icon, Input, Button } from 'antd';
 import IUserRegister from '../interfaces/IUserRegister';
 import { RouteComponentProps } from 'react-router-dom'
 import { Col, Row } from 'antd';
+import Auth from '../../../helpers/Auth/Auth';
 
 interface RegisterState {
     username: string;
@@ -20,6 +21,12 @@ export default class Register extends React.Component<RegisterProps & RouteCompo
         password: '',
         email: '',
         confirmPassword: ''
+    }
+
+    public componentDidMount(): void {
+        if (Auth.isUserAuthenticated()) {
+            this.props.history.push('/');
+        }
     }
 
     private async handleSubmit(): Promise<void> {

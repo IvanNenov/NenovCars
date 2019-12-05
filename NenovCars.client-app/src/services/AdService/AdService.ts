@@ -15,12 +15,4 @@ export default class AdService {
 
         return viewModel;
     }  
-
-    public async getCarsPage(currentPage: string): Promise<void> {
-        try {
-            await Axios.get('api/car/GetAllCars' + currentPage)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 } 
