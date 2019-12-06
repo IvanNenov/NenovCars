@@ -2,19 +2,21 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using WebApiAuth.Data.Models.User;
     using WebApiAuth.ViewModels.Car;
-    using WebApiAuth.ViewModels.User;
 
     public interface ICarService
     {
-        void CreateCar(AddCarViewModel model, string userId);
+        Task<bool> CreateCar(AddCarViewModel model, ApplicationUser user);
 
-        bool TryAddToFavorite(string id);
+        Task<bool> TryAddToFavorite(string id, ApplicationUser user);
 
-        IEnumerable<GetFavoriteCarsViewModel> GetFavoriteCars();
+        int GetFavroiteAdsCount(ApplicationUser user);
 
-        Task<ICollection<CarViewModel>> GetAll(int toSkip, int pageSize);
+        Task<ICollection<CarViewModel>> GetFavoriteCars(int toSkip, int pageSize, ApplicationUser user);
 
         int GetAdsCount();
+
+        Task<ICollection<CarViewModel>> GetAll(int toSkip, int pageSize);
     }
 }

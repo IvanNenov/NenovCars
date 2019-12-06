@@ -1,44 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApiAuth.Data;
-using WebApiAuth.Data.Models;
-using WebApiAuth.Data.Models.Enums;
-using WebApiAuth.Data.Models.User;
-using WebApiAuth.Services.Contracts;
-using WebApiAuth.ViewModels.Car;
-using WebApiAuth.ViewModels.User;
-
-namespace WebApiAuth.Services
+﻿namespace WebApiAuth.Services
 {
+    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using WebApiAuth.Data;
+    using WebApiAuth.Data.Models;
+    using WebApiAuth.Data.Models.Enums;
+    using WebApiAuth.Data.Models.User;
+    using WebApiAuth.Services.Contracts;
+    using WebApiAuth.ViewModels.Car;
+
     public class CarService : ICarService
     {
         private readonly WebApiAuthDbContext context;
-        private readonly IHttpContextAccessor accessor;
 
-        public CarService(WebApiAuthDbContext context, IHttpContextAccessor accessor)
+        public CarService(WebApiAuthDbContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-
-            if (accessor == null)
-            {
-                throw new ArgumentNullException(nameof(accessor));
-            }
-
-            this.context = context;
-            this.accessor = accessor;
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public void CreateCar(AddCarViewModel model, string userId)
+        public async Task<bool> CreateCar(AddCarViewModel model, ApplicationUser user)
         {
-            var user = this.context.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
-
             Enum.TryParse(model.Fuel, out Fuel fuel);
             Enum.TryParse(model.Fuel, out Transmission transmission);
             Enum.TryParse(model.Fuel, out VehicleType vehicleType);
@@ -63,8 +47,10 @@ namespace WebApiAuth.Services
                 CarOwner = user
             };
 
-            this.context.Cars.Add(car);
-            this.context.SaveChanges();
+            await this.context.Cars.AddAsync(car);
+            var isSuccessful = await this.context.SaveChangesAsync();
+
+            return isSuccessful > 0 ? true : false;
         }
 
         public int GetAdsCount()
@@ -74,73 +60,142 @@ namespace WebApiAuth.Services
 
         public async Task<ICollection<CarViewModel>> GetAll(int toSkip, int pageSize)
         {
-            var listOfAllCars = await this.context.Cars.Select(x => new CarViewModel
-            {
-                Id = x.Id,
-                ImageUrl = x.ImageUrl,
-                Brand = x.Brand,
-                Fuel = x.Fuel.ToString(),
-                Hp = x.Hp,
-                Model = x.Model,
-                AdTitle = x.AdTitle,
-                Color = x.Color,
-                Description = x.Description,
-                Kilometre = x.Kilometre,
-                Price = x.Price,
-                Transmission = x.Transmission.ToString(),
-                VehicleType = x.VehicleType.ToString(),
-                YearOfProduction = x.YearOfProduction
-            }).Skip(toSkip)
+            var listOfAllCars = await this.context.Cars
+                .Skip(toSkip)
                 .Take(pageSize)
+                .Select(x => new CarViewModel
+                {
+                    Id = x.Id,
+                    ImageUrl = x.ImageUrl,
+                    Brand = x.Brand,
+                    Fuel = x.Fuel.ToString(),
+                    Hp = x.Hp,
+                    Model = x.Model,
+                    AdTitle = x.AdTitle,
+                    Color = x.Color,
+                    Description = x.Description,
+                    Kilometre = x.Kilometre,
+                    Price = x.Price,
+                    Transmission = x.Transmission.ToString(),
+                    VehicleType = x.VehicleType.ToString(),
+                    YearOfProduction = x.YearOfProduction
+                })
                 .ToListAsync();
 
             return listOfAllCars;
         }
 
-        public IEnumerable<GetFavoriteCarsViewModel> GetFavoriteCars()
+        public int GetFavroiteAdsCount(ApplicationUser user)
         {
-            var currentUser = this.accessor.HttpContext.User.Identity.Name;
-            var currentUserObject = this.context.Users.FirstOrDefault(x => x.UserName == currentUser);
-
-            var favCarsForCurrentUser = this.context.Cars
+            return this.context.Cars
                 .Include(x => x.UserFavoriteCars)
-                .ThenInclude(x => x.Car)
-                .Where(x => x.UserFavoriteCars.Any(y => y.ApplicationUserId == currentUserObject.Id))
-                .ToList();
-
-            var favoriteCarsList = new List<GetFavoriteCarsViewModel>();
-
-            foreach (var car in favCarsForCurrentUser)
-            {
-                var favoriteCars = new GetFavoriteCarsViewModel();
-
-                favoriteCars.Id = car.Id;
-                favoriteCars.ImageUrl = car.ImageUrl;
-                favoriteCars.Brand = car.Brand;
-                favoriteCars.Fuel = car.Fuel;
-                favoriteCars.Hp = car.Hp;
-                favoriteCars.Model = car.Model;
-
-                favoriteCarsList.Add(favoriteCars);
-            }
-
-            return favoriteCarsList;
+                .Where(x => x.ApplicationUserId == user.Id)
+                .Count();
         }
 
-        public bool TryAddToFavorite(string id)
+        public async Task<ICollection<CarViewModel>> GetFavoriteCars(int toSkip, int pageSize, ApplicationUser user)
         {
-            var currentCar = this.context.Cars.Find(id);
-            var currentUser = this.accessor.HttpContext.User.Identity.Name;
-            var currentUserObject = this.context.ApplicationUsers.Include(x => x.FavoriteCars).FirstOrDefault(x => x.UserName == currentUser);
+            if (toSkip < 0)
+            {
+                return null;
+            }
 
-            var isAppliedYet = currentUserObject.FavoriteCars.FirstOrDefault(x => x.CarId == currentCar.Id);
+            if (pageSize <= 0)
+            {
+                return null;
+            }
 
-            if (isAppliedYet != null)
+            if (user == null)
+            {
+                return null;
+            }
+
+            var favCarsForCurrentUser = await this.context.UserFavoriteCars
+                .Where(x => x.ApplicationUserId == user.Id)
+                .Skip(toSkip)
+                .Take(pageSize)
+                .ToListAsync();
+
+            if (favCarsForCurrentUser == null)
+            {
+                return null;
+            }
+
+            var cars = new List<CarViewModel>();
+            foreach (var car in favCarsForCurrentUser)
+            {
+                var favAd = await this.context.Cars
+                    .FirstOrDefaultAsync(x => x.Id == car.CarId);
+
+                cars.Add(new CarViewModel
+                {
+                    Id = favAd.Id,
+                    ImageUrl = favAd.ImageUrl,
+                    Brand = favAd.Brand,
+                    Fuel = favAd.Fuel.ToString(),
+                    Hp = favAd.Hp,
+                    Model = favAd.Model,
+                    AdTitle = favAd.AdTitle,
+                    Color = favAd.Color,
+                    Description = favAd.Description,
+                    Kilometre = favAd.Kilometre,
+                    Price = favAd.Price,
+                    Transmission = favAd.Transmission.ToString(),
+                    VehicleType = favAd.VehicleType.ToString(),
+                    YearOfProduction = favAd.YearOfProduction
+                });
+            }
+
+            if (cars == null)
+            {
+                return null;
+            }
+
+            return cars;
+        }
+
+        public async Task<bool> TryAddToFavorite(string id, ApplicationUser user)
+        {
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return false;
             }
 
-            var usersJobAdd = new UserFavoriteCar()
+            if (user == null)
+            {
+                return false;
+            }
+
+            // Gets the ad that have to add to favorites.
+            var currentCar = this.context.Cars
+                .FirstOrDefault(x => x.Id == id);
+
+            if (currentCar == null)
+            {
+                return false;
+            }
+
+            // Gets the current user including its favorite cars collection.
+            var currentUserObject = this.context.ApplicationUsers
+                .Include(x => x.FavoriteCars)
+                .FirstOrDefault(x => x.Id == user.Id);
+
+            if (currentUserObject == null)
+            {
+                return false;
+            }
+
+            // Checks if the car already exist in user's favorites.
+            var isFavoriteYet = currentUserObject.FavoriteCars
+                .FirstOrDefault(x => x.CarId == currentCar.Id);
+
+            if (isFavoriteYet != null)
+            {
+                return false;
+            }
+
+            // Create ad model.
+            var userFavoriteAd = new UserFavoriteCar()
             {
                 Car = currentCar,
                 CarId = currentCar.Id,
@@ -148,11 +203,20 @@ namespace WebApiAuth.Services
                 ApplicationUserId = currentUserObject.Id
             };
 
-            currentUserObject.FavoriteCars.Add(usersJobAdd);
-            currentCar.UserFavoriteCars.Add(usersJobAdd);
+            // Adds the ad in the user's favorites collection.
+            currentUserObject.FavoriteCars.Add(userFavoriteAd);
 
-            this.context.SaveChanges();
-            return true;
+            // Adds the ad and user ids in the mapping table
+            currentCar.UserFavoriteCars.Add(userFavoriteAd);
+
+            var isSuccessful = await this.context.SaveChangesAsync();
+
+            if (isSuccessful > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

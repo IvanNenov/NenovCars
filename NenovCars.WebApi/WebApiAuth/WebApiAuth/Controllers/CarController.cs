@@ -1,11 +1,11 @@
 ﻿namespace WebApiAuth.Controllers
 {
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
+    using WebApiAuth.Data.Models.User;
     using WebApiAuth.Services.Contracts;
     using WebApiAuth.ViewModels.Car;
     using WebApiAuth.ViewModels.User;
@@ -15,43 +15,79 @@
     public class CarController : ControllerBase
     {
         private readonly ICarService _carService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public CarController(ICarService carService)
+        public CarController(ICarService carService, UserManager<ApplicationUser> userManager)
         {
             this._carService = carService;
+            this.userManager = userManager;
         }
 
         [Authorize]
         [HttpPost("[action]")]
-        public ActionResult AddCar([FromBody] AddCarViewModel carAd)
+        public async Task<ActionResult> AddCar([FromBody] AddCarViewModel carAd)
         {
-            var username = this.Request.Headers["UserId"];
-            if (string.IsNullOrWhiteSpace(username))
+            if(carAd == null)
+            {
+                return this.BadRequest("The input model cannot be null");
+            }
+
+            var userId = this.Request.Headers["UserId"];
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return this.BadRequest("The user id cannot be empty");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+            if(user == null)
             {
                 return this.Unauthorized();
             }
 
-            this._carService.CreateCar(carAd, username);
-            return this.Ok();
+            var isSuccessful = await this._carService.CreateCar(carAd, user);
+
+            if(!isSuccessful)
+            {
+                return this.BadRequest();
+            }
+
+            return this.Ok(isSuccessful);
         }
 
-        public ActionResult AddToFavorite(string id)
+        [Authorize]
+        [HttpGet("[action]/{id}/{userId}")]
+        public async Task<ActionResult> AddToFavorite(string id, string userId)
         {
-            this._carService.TryAddToFavorite(id);
-            return this.Ok();
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return this.BadRequest("Invalid ad id");
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return this.BadRequest("Invalid user id");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return this.Unauthorized();
+            }
+
+            var isOperationSucceeded = await this._carService.TryAddToFavorite(id, user);
+
+            if (!isOperationSucceeded)
+            {
+                return this.BadRequest("This ad is already in favorite list.");
+            }
+
+            return this.Ok(isOperationSucceeded);
         }
 
         [AllowAnonymous]
         [HttpGet("[action]/{currentPage}")]
         public async Task<ActionResult> GetAllCars(string currentPage)
         {
-            ICollection<CarViewModel> allCars = new List<CarViewModel>();
-
-            if (string.IsNullOrWhiteSpace(currentPage))
-            {
-                return this.BadRequest();
-            }
-
             var isValidPage = int.TryParse(currentPage, out int page);
             if (!isValidPage)
             {
@@ -63,7 +99,7 @@
 
             double totalPageCount;
 
-            allCars = await this._carService.GetAll(skip, pageSize);
+            var allCars = await this._carService.GetAll(skip, pageSize);
 
             totalPageCount = Math.Ceiling((double)this._carService.GetAdsCount() / pageSize);
 
@@ -78,41 +114,52 @@
             return this.Ok(viewModel);
         }
 
-        [HttpGet("[action]/{currentPage}")]
-        public ActionResult FavoriteCars(int? currentPage)
+        [Authorize]
+        [HttpGet("[action]/{userId}/{currentPage}")]
+        public async Task<ActionResult> GetFavoriteCars(string userId, string currentPage)
         {
-            var allCars = new List<GetFavoriteCarsViewModel>();
+            var isValidPage = int.TryParse(currentPage, out int page);
+            if (!isValidPage)
+            {
+                page = 1;
+            }
 
-            var page = currentPage ?? 1;
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return this.BadRequest("Invalid user id");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return this.Unauthorized();
+            }
+
             var pageSize = 5;
             var skip = (page - 1) * pageSize;
 
             double totalPageCount;
 
-            allCars = this._carService
-                .GetFavoriteCars()
-                .Skip(skip)
-                .Take(pageSize)
-                .ToList();
+            var allCars = await this._carService
+                .GetFavoriteCars(skip, pageSize, user)
+                .ConfigureAwait(false);
 
-            totalPageCount = Math.Ceiling((double)this._carService.GetFavoriteCars().Count() / pageSize);
+            totalPageCount = Math.Ceiling((double)this._carService.GetFavroiteAdsCount(user) / pageSize);
 
-            var viewModel = new ListOfFavoriteCars()
+            var viewModel = new ListOfAllCarsViewModel()
             {
-                FavoriteCarAds = allCars,
-                CurrentPage = page,
-                PageSize = pageSize,
-                TotalPagesCount = totalPageCount,
-                IsAny = true
+                AllCars = allCars,
+                CurrentPage = page.ToString(),
+                PageSize = pageSize.ToString(),
+                TotalPagesCount = totalPageCount.ToString()
             };
 
-            if (allCars.Count > 0)
+            if (allCars == null || viewModel == null)
             {
-                return this.Ok(viewModel);
+                return this.BadRequest();
             }
 
-            viewModel.IsAny = false;
-            return this.BadRequest();
+            return this.Ok(viewModel);
         }
     }
 }
