@@ -14,4 +14,19 @@ export default class AdService {
 
         return viewModel;
     }  
+
+    public async GetFavoriteCars(page: string): Promise<IAllCarsContainer>{
+        let viewModel: IAllCarsContainer;
+
+        try {
+            let result = await Axios.get('api/car/FavoriteCars/' + page);
+            viewModel = result.data;
+        }
+
+        catch(error){
+            console.log(error);
+        }
+
+        return viewModel;
+    }
 }  

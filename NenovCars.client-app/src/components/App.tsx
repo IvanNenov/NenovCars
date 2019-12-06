@@ -9,6 +9,7 @@ import Home from './Home/Home';
 import Navbar from './Navbar/Navbar';
 import { IUserStore } from '../stores/UserStore/UserStore';
 import { inject, observer } from 'mobx-react';
+import FavoriteCars from '../components/FavoriteCars/FavoriteCars';
 
 interface AppProps {
 	userStore?: IUserStore;
@@ -34,6 +35,7 @@ export default class App extends React.Component<AppProps, AppState> {
 						<Route path='/login' component={Login} />
 						<Route path='/register' component={Register} />
 						<Route path='/addCar' component={AddCar} />
+						<Route path='/favoriteCars' component={FavoriteCars} />
 					</Switch>
 				</Layout>
 			</div>

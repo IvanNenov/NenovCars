@@ -44,6 +44,7 @@ class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarSt
                 ) : <>
                         <Button type="primary" onClick={(): void => this.logout()}>Logout</Button>
                         <Button type="primary" href="/addCar">Add Car</Button>
+                        <Button type="primary" href="/favoriteCars">Favorite Cars</Button>
                     </>}
 
             </Header>

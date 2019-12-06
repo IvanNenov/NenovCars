@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
-import AuthService from '../../../services/Auth/AuthService';
 import IUserLogin from '../interfaces/IUserLogin';
 import { RouteComponentProps } from 'react-router-dom';
 import { Col, Row } from 'antd';
@@ -33,7 +32,6 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
     }
 
     private async handleSubmit(): Promise<void> {
-        let authService = new AuthService();
         if (this.state.username !== '' && this.state.password !== '') {
 
             let userBody: IUserLogin = {
@@ -41,7 +39,7 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
                 password: this.state.password
             }
 
-            let isLogged = await authService.login(userBody);
+            let isLogged = await this.props.userStore.login(userBody);
 
             if (isLogged) {
                 this.props.history.push('/');

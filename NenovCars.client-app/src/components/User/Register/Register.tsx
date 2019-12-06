@@ -1,10 +1,11 @@
 import * as React from 'react';
-import AuthService from '../../../services/Auth/AuthService';
 import { Form, Icon, Input, Button } from 'antd';
 import IUserRegister from '../interfaces/IUserRegister';
 import { RouteComponentProps } from 'react-router-dom'
 import { Col, Row } from 'antd';
 import Auth from '../../../helpers/Auth/Auth';
+import { IUserStore } from '../../../stores/UserStore/UserStore';
+import { inject, observer } from 'mobx-react';
 
 interface RegisterState {
     username: string;
@@ -13,8 +14,13 @@ interface RegisterState {
     email: string
 }
 
-interface RegisterProps { }
+interface RegisterProps {
+    userStore?: IUserStore;
 
+ }
+
+ @inject('userStore')
+ @observer
 export default class Register extends React.Component<RegisterProps & RouteComponentProps, RegisterState> {
     public state: RegisterState = {
         username: '',
@@ -31,14 +37,14 @@ export default class Register extends React.Component<RegisterProps & RouteCompo
 
     private async handleSubmit(): Promise<void> {
         if (this.state.username !== '' && this.state.email !== '' && this.state.password === this.state.confirmPassword) {
-            let authService = new AuthService();
+            
             let userBody: IUserRegister = {
                 username: this.state.username,
                 password: this.state.password,
                 email: this.state.email
             };
 
-            let isRegisterSucceeded = await authService.register(userBody);
+            let isRegisterSucceeded = this.props.userStore.register(userBody);
 
             if (isRegisterSucceeded) {
                 this.props.history.push('/login');

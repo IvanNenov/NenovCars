@@ -78,8 +78,8 @@
             return this.Ok(viewModel);
         }
 
-        [HttpGet]
-        public ActionResult FavoriteJobs(int? currentPage)
+        [HttpGet("[action]/{currentPage}")]
+        public ActionResult FavoriteCars(int? currentPage)
         {
             var allCars = new List<GetFavoriteCarsViewModel>();
 
