@@ -3,8 +3,6 @@ import { ICarAdInput } from '../../components/CarAd/CarAd';
 import Auth from '../../helpers/Auth/Auth';
 
 export default class CarService {
-
-
     public async addCar(carAd: ICarAdInput): Promise<boolean> {
         let config = {
             headers: {

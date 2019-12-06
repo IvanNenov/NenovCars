@@ -35,16 +35,16 @@ export class UserStore implements IUserStore {
     }
 
     public login(user: IUserLogin): Promise<boolean> {
-       let isLoggedIn = this._authService.login(user);
+        let isLoggedIn = this._authService.login(user);
 
-       return isLoggedIn;
+        return isLoggedIn;
     }
 
     public register(user: IUserRegister): Promise<boolean> {
         let isRegistered = this._authService.register(user);
- 
+
         return isRegistered;
-     }
+    }
 
     @computed
     public get isUserAuthenticated(): boolean {
