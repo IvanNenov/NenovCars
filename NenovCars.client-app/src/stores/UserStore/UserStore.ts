@@ -1,8 +1,8 @@
-import { observable, action, computed } from 'mobx';
-import Auth from '../../helpers/Auth/Auth';
-import AuthService from '../../services/Auth/AuthService';
-import IUserLogin from '../../components/User/interfaces/IUserLogin';
-import IUserRegister from '../../components/User/interfaces/IUserRegister';
+import { observable, action, computed } from "mobx";
+import Auth from "../../helpers/Auth/Auth";
+import AuthService from "../../services/Auth/AuthService";
+import IUserLogin from "../../components/User/interfaces/IUserLogin";
+import IUserRegister from "../../components/User/interfaces/IUserRegister";
 
 export interface IUserStore {
     isUserAuthenticated: boolean;
@@ -10,7 +10,7 @@ export interface IUserStore {
     login(user: IUserLogin): Promise<boolean>;
     register(user: IUserRegister): Promise<boolean>;
 
-    setIsUserAuthenticated(isLoggedIn: boolean): void
+    setIsUserAuthenticated(isLoggedIn: boolean): void;
     logout(): void;
 }
 
@@ -23,9 +23,7 @@ export class UserStore implements IUserStore {
         this._authService = authService;
     }
 
-    public setApiUrl(url: string): void {
-
-    }
+    public setApiUrl(url: string): void {}
 
     public logout(): void {
         if (this.isUserAuthenticated) {
