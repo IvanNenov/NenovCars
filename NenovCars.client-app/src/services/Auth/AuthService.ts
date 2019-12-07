@@ -13,7 +13,6 @@ export default class AuthService {
         }
     }
 
-
     public async register(user: IUserRegister): Promise<boolean> {
         let isRegisterSuccesful: boolean = false;
 

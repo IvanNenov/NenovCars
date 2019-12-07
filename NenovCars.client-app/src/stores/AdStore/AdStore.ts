@@ -1,6 +1,6 @@
-import { observable, action } from "mobx";
-import AdService from "../../services/AdService/AdService";
-import { IAllCarsContainer } from "../../components/AdsContainer/interfaces/IAllCarsContainer";
+import { observable, action } from 'mobx';
+import AdService from '../../services/AdService/AdService';
+import { IAllCarsContainer } from '../../components/AdsContainer/interfaces/IAllCarsContainer';
 
 export interface IAdStore {
     carsContainer: IAllCarsContainer;

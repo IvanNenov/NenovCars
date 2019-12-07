@@ -15,15 +15,15 @@ export default class Auth {
 
     public static getCurrentUserUsername(): string | null {
         let username;
-        if(this.getAuthToken()) {
+        if (this.getAuthToken()) {
             username = localStorage.getItem('Username');
         }
 
-        return username
+        return username;
     }
     public static getCurrentUserId(): string | null {
         let userId;
-        if(this.getAuthToken()) {
+        if (this.getAuthToken()) {
             userId = localStorage.getItem('UserId');
         }
 

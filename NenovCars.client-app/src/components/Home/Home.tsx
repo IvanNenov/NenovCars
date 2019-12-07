@@ -3,9 +3,11 @@ import AdsContainer from '../AdsContainer/AdsContainer';
 import { inject, observer } from 'mobx-react';
 import { IAdStore } from '../../stores/AdStore/AdStore';
 import LoadingIndicatior from '../LoadingIndicator/LoadingIndicator';
+import { IUiStore } from '../../stores/UiStore/UiStore';
 
 interface HomeProps {
     adStore?: IAdStore;
+    uiStore?: IUiStore;
 }
 
 interface HomeState {
@@ -14,31 +16,32 @@ interface HomeState {
 }
 
 @inject('adStore')
+@inject('uiStore')
 @observer
 export default class Home extends React.Component<HomeProps, HomeState> {
     public state: HomeState = {
         page: 1,
         isAdsLoading: true
-    }
+    };
 
     public async componentDidMount(): Promise<void> {
         await this.props.adStore.getAllCars(this.state.page.toString());
 
         if (this.props.adStore.carsContainer && this.props.adStore.carsContainer.allCars) {
+            this.props.uiStore.setIsAllAdsOpen(true);
             this.setState({
                 isAdsLoading: false
-            })
+            });
         }
+    }
+
+    public componentWillUnmount(): void {
+        this.props.uiStore.setIsAllAdsOpen(false);
     }
 
     public render() {
         return (
-            <>
-                {this.state.isAdsLoading ?
-                    <LoadingIndicatior /> :
-                    <AdsContainer carsList={this.props.adStore.carsContainer.allCars}/>}
-
-            </>
+            <>{this.state.isAdsLoading ? <LoadingIndicatior /> : <AdsContainer carsList={this.props.adStore.carsContainer.allCars} />}</>
         );
     }
 }

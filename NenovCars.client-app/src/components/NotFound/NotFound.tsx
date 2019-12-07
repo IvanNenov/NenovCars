@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Result, Button } from "antd";
+import * as React from 'react';
+import { Result, Button } from 'antd';
 
 export default class NotFound extends React.Component {
     public render(): JSX.Element {

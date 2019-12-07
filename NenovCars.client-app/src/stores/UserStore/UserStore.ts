@@ -1,8 +1,8 @@
-import { observable, action, computed } from "mobx";
-import Auth from "../../helpers/Auth/Auth";
-import AuthService from "../../services/Auth/AuthService";
-import IUserLogin from "../../components/User/interfaces/IUserLogin";
-import IUserRegister from "../../components/User/interfaces/IUserRegister";
+import { observable, action, computed } from 'mobx';
+import Auth from '../../helpers/Auth/Auth';
+import AuthService from '../../services/Auth/AuthService';
+import IUserLogin from '../../components/User/interfaces/IUserLogin';
+import IUserRegister from '../../components/User/interfaces/IUserRegister';
 
 export interface IUserStore {
     isUserAuthenticated: boolean;

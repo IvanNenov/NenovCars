@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 import IUserRegister from '../interfaces/IUserRegister';
-import { RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom';
 import { Col, Row } from 'antd';
 import Auth from '../../../helpers/Auth/Auth';
 import { IUserStore } from '../../../stores/UserStore/UserStore';
@@ -11,23 +11,22 @@ interface RegisterState {
     username: string;
     password: string;
     confirmPassword: string;
-    email: string
+    email: string;
 }
 
 interface RegisterProps {
     userStore?: IUserStore;
+}
 
- }
-
- @inject('userStore')
- @observer
+@inject('userStore')
+@observer
 export default class Register extends React.Component<RegisterProps & RouteComponentProps, RegisterState> {
     public state: RegisterState = {
         username: '',
         password: '',
         email: '',
         confirmPassword: ''
-    }
+    };
 
     public componentDidMount(): void {
         if (Auth.isUserAuthenticated()) {
@@ -37,7 +36,6 @@ export default class Register extends React.Component<RegisterProps & RouteCompo
 
     private async handleSubmit(): Promise<void> {
         if (this.state.username !== '' && this.state.email !== '' && this.state.password === this.state.confirmPassword) {
-            
             let userBody: IUserRegister = {
                 username: this.state.username,
                 password: this.state.password,
@@ -112,7 +110,13 @@ export default class Register extends React.Component<RegisterProps & RouteCompo
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()} className="login-form-button">Register</Button>
+                            <Button
+                                type="primary"
+                                onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()}
+                                className="login-form-button"
+                            >
+                                Register
+                            </Button>
                         </Form.Item>
                     </Form>
                 </Col>

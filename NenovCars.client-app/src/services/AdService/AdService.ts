@@ -1,12 +1,12 @@
-import Axios from "axios";
-import { IAllCarsContainer } from "../../components/AdsContainer/interfaces/IAllCarsContainer";
-import Auth from "../../helpers/Auth/Auth";
+import Axios from 'axios';
+import { IAllCarsContainer } from '../../components/AdsContainer/interfaces/IAllCarsContainer';
+import Auth from '../../helpers/Auth/Auth';
 
 export default class AdService {
     public async getAllCars(page: string): Promise<IAllCarsContainer> {
         let viewModel: IAllCarsContainer;
         try {
-            let result = await Axios.get("api/car/GetAllCars/" + page);
+            let result = await Axios.get('api/car/GetAllCars/' + page);
 
             viewModel = result.data;
         } catch (error) {
@@ -28,7 +28,7 @@ export default class AdService {
         let userId = Auth.getCurrentUserId();
 
         try {
-            let result = await Axios.get("api/car/GetFavoriteCars/" + userId + "/" + page, config);
+            let result = await Axios.get('api/car/GetFavoriteCars/' + userId + '/' + page, config);
 
             viewModel = result.data;
         } catch (error) {
@@ -48,7 +48,7 @@ export default class AdService {
         let userId = Auth.getCurrentUserId();
         let isOperationSucceeded: boolean = false;
         try {
-            let result = await Axios.get("api/car/AddToFavorite/" + id + "/" + userId, config);
+            let result = await Axios.get('api/car/AddToFavorite/' + id + '/' + userId, config);
 
             isOperationSucceeded = result.data;
         } catch (error) {
@@ -68,7 +68,7 @@ export default class AdService {
         let userId = Auth.getCurrentUserId();
         let isOperationSucceeded: boolean = false;
         try {
-            let result = await Axios.get("api/car/RemoveFromFavorite/" + id + "/" + userId, config);
+            let result = await Axios.get('api/car/RemoveFromFavorite/' + id + '/' + userId, config);
 
             isOperationSucceeded = result.data;
         } catch (error) {
@@ -77,6 +77,4 @@ export default class AdService {
 
         return isOperationSucceeded;
     }
-
-
 }

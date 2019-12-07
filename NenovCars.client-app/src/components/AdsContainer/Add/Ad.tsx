@@ -1,12 +1,12 @@
-import * as React from "react";
-import { ICarAd } from "../interfaces/ICarAd";
-import { Card, Row, Col, Icon } from "antd";
-import { IAdStore } from "../../../stores/AdStore/AdStore";
-import { inject, observer } from "mobx-react";
-import { IUiStore } from "../../../stores/UiStore/UiStore";
-import { FavButton } from "./FavButton/FavButton";
-import "./Ad.css";
-import Auth from "../../../helpers/Auth/Auth";
+import * as React from 'react';
+import { ICarAd } from '../interfaces/ICarAd';
+import { Card, Row, Col, Icon } from 'antd';
+import { IAdStore } from '../../../stores/AdStore/AdStore';
+import { inject, observer } from 'mobx-react';
+import { IUiStore } from '../../../stores/UiStore/UiStore';
+import { FavButton } from './FavButton/FavButton';
+import './Ad.css';
+import Auth from '../../../helpers/Auth/Auth';
 
 interface AdProps {
     adStore?: IAdStore;
@@ -18,8 +18,8 @@ interface AdState {
     mileage: string;
 }
 
-@inject("adStore")
-@inject("uiStore")
+@inject('adStore')
+@inject('uiStore')
 @observer
 export default class Add extends React.Component<AdProps, AdState> {
     public state: AdState = {
@@ -69,7 +69,7 @@ export default class Add extends React.Component<AdProps, AdState> {
                                         this.props.adStore.removeFromFavorite(this.props.ad.id);
                                     }}
                                 >
-                                    <Icon style={{width: '2em', height: '2em'}} type="delete" theme="twoTone" />
+                                    <Icon style={{ width: '2em', height: '2em' }} type="delete" theme="twoTone" />
                                 </div>
                             )}
                         </Col>

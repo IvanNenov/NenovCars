@@ -7,7 +7,6 @@ import { inject, observer } from 'mobx-react';
 import { IUserStore } from '../../../stores/UserStore/UserStore';
 import Auth from '../../../helpers/Auth/Auth';
 
-
 interface LoginProps {
     userStore?: IUserStore;
 }
@@ -33,16 +32,16 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
 
     private async handleSubmit(): Promise<void> {
         if (this.state.username !== '' && this.state.password !== '') {
-
             let userBody: IUserLogin = {
                 username: this.state.username,
                 password: this.state.password
-            }
+            };
 
             let isLogged = await this.props.userStore.login(userBody);
 
             if (isLogged) {
                 this.props.history.push('/');
+                this.props.userStore.setIsUserAuthenticated(true);
             }
         }
     }
@@ -62,7 +61,6 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
     public render(): JSX.Element {
         console.log('LoginComponent render');
         return (
-
             <Row type="flex" justify="center">
                 <Col>
                     <Form className="login-form">
@@ -82,7 +80,13 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
                             />
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()} className="login-form-button">Log in</Button>
+                            <Button
+                                type="primary"
+                                onClick={async (event: React.MouseEvent<HTMLElement, MouseEvent>) => await this.handleSubmit()}
+                                className="login-form-button"
+                            >
+                                Log in
+                            </Button>
                         </Form.Item>
                     </Form>
                 </Col>

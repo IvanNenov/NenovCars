@@ -5,7 +5,7 @@ import './index.css';
 import '../node_modules/antd/dist/antd.css';
 import { Provider } from 'mobx-react';
 import { stores } from './stores/StoresContainer';
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
     <Provider {...stores}>
@@ -13,4 +13,5 @@ ReactDOM.render(
             <App />
         </Router>
     </Provider>,
-    document.getElementById('root'));
+    document.getElementById('root')
+);
