@@ -154,7 +154,12 @@
             return cars;
         }
 
-        public async Task<bool> TryAddToFavorite(string id, ApplicationUser user)
+        public Task<bool> RemoveFromFavorite(string id, ApplicationUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> AddToFavorite(string id, ApplicationUser user)
         {
             if (string.IsNullOrWhiteSpace(id))
             {

@@ -9,7 +9,9 @@
     {
         Task<bool> CreateCar(AddCarViewModel model, ApplicationUser user);
 
-        Task<bool> TryAddToFavorite(string id, ApplicationUser user);
+        Task<bool> AddToFavorite(string id, ApplicationUser user);
+
+        Task<bool> RemoveFromFavorite(string id, ApplicationUser user);
 
         int GetFavroiteAdsCount(ApplicationUser user);
 

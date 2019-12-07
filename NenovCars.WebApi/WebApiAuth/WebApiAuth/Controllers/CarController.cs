@@ -1,14 +1,13 @@
 ﻿namespace WebApiAuth.Controllers
 {
+    using System;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System;
     using System.Threading.Tasks;
     using WebApiAuth.Data.Models.User;
     using WebApiAuth.Services.Contracts;
     using WebApiAuth.ViewModels.Car;
-    using WebApiAuth.ViewModels.User;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -56,6 +55,36 @@
 
         [Authorize]
         [HttpGet("[action]/{id}/{userId}")]
+        public async Task<ActionResult> RemoveFromFavorite(string id, string userId)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return this.BadRequest("Invalid ad id");
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return this.BadRequest("Invalid user id");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return this.Unauthorized();
+            }
+
+            var isOperationSucceeded = await this._carService.RemoveFromFavorite(id, user);
+
+            if (!isOperationSucceeded)
+            {
+                return this.BadRequest("This ad is no longer in the favorite list.");
+            }
+
+            return this.Ok(isOperationSucceeded);
+        }
+
+        [Authorize]
+        [HttpGet("[action]/{id}/{userId}")]
         public async Task<ActionResult> AddToFavorite(string id, string userId)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -74,11 +103,11 @@
                 return this.Unauthorized();
             }
 
-            var isOperationSucceeded = await this._carService.TryAddToFavorite(id, user);
+            var isOperationSucceeded = await this._carService.AddToFavorite(id, user);
 
             if (!isOperationSucceeded)
             {
-                return this.BadRequest("This ad is already in favorite list.");
+                return this.BadRequest("This ad is already in the favorite list.");
             }
 
             return this.Ok(isOperationSucceeded);

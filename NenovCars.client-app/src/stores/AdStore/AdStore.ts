@@ -1,6 +1,6 @@
-import { observable, action } from 'mobx';
-import AdService from '../../services/AdService/AdService';
-import { IAllCarsContainer } from '../../components/AdsContainer/interfaces/IAllCarsContainer';
+import { observable, action } from "mobx";
+import AdService from "../../services/AdService/AdService";
+import { IAllCarsContainer } from "../../components/AdsContainer/interfaces/IAllCarsContainer";
 
 export interface IAdStore {
     carsContainer: IAllCarsContainer;
@@ -9,6 +9,7 @@ export interface IAdStore {
     getAllCars(page: string): Promise<void>;
     getFavoriteCars(page: string): Promise<void>;
     tryAddToFavorite(adId: string): Promise<void>;
+    removeFromFavorite(adId: string): Promise<void>;
 }
 
 export class AdStore implements IAdStore {
@@ -21,9 +22,7 @@ export class AdStore implements IAdStore {
         this._adService = adService;
     }
 
-    public setApiUrl(url: string): void {
-
-    }
+    public setApiUrl(url: string): void {}
 
     @action
     public async getAllCars(page: string): Promise<void> {
@@ -32,6 +31,10 @@ export class AdStore implements IAdStore {
 
     public async tryAddToFavorite(adId: string): Promise<void> {
         let isOperationSucceeded = await this._adService.addToFavorite(adId);
+    }
+
+    public async removeFromFavorite(adId: string): Promise<void> {
+        let isOperationSucceeded = await this._adService.removeFromFavorite(adId);
     }
 
     @action
