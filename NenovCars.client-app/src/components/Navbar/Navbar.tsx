@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { Layout, Button, Menu } from 'antd';
-import { IUserStore } from '../../stores/UserStore/UserStore';
-import { inject, observer } from 'mobx-react';
-import { RouteComponentProps, withRouter } from 'react-router-dom'
-
-const { Header } = Layout;
+import * as React from "react";
+import { Menu, Icon } from "antd";
+import { IUserStore } from "../../stores/UserStore/UserStore";
+import { inject, observer } from "mobx-react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { ClickParam } from "antd/lib/menu";
+import "./Navbar.css";
 
 interface NavbarProps {
     userStore?: IUserStore;
@@ -14,12 +14,12 @@ interface NavbarState {
     isLoggedIn: boolean;
 }
 
-@inject('userStore')
+@inject("userStore")
 @observer
 class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarState> {
     public state: NavbarState = {
         isLoggedIn: this.props.userStore.isUserAuthenticated
-    }
+    };
 
     public componentDidMount(): void {
         if (this.props.userStore.isUserAuthenticated) {
@@ -27,29 +27,53 @@ class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarSt
         }
     }
 
+    public render(): JSX.Element {
+        return (
+            <Menu mode="horizontal" onClick={this.handleMenuClick}>
+                <Menu.Item key="home">
+                    <Icon type="home" />
+                    Home
+                </Menu.Item>
+                <Menu.Item className="n-nav-float-right" key="register" hidden={this.props.userStore.isLoggedIn}>
+                    <Icon type="user-add" />
+                    Register
+                </Menu.Item>
+                <Menu.Item className="n-nav-float-right" key="login" hidden={this.props.userStore.isLoggedIn}>
+                    <Icon type="login" />
+                    Login
+                </Menu.Item>
+                <Menu.Item key="create-add" hidden={!this.props.userStore.isLoggedIn}>
+                    <Icon type="car" />
+                    Create Ad
+                </Menu.Item>
+                <Menu.Item key="favorites" hidden={!this.props.userStore.isLoggedIn}>
+                    <Icon type="heart" />
+                    Favorites
+                </Menu.Item>
+                <Menu.Item className="n-nav-float-right" key="logout" hidden={!this.props.userStore.isLoggedIn}>
+                    <Icon type="logout" />
+                    Logout
+                </Menu.Item>
+            </Menu>
+        );
+    }
+
+    private handleMenuClick = (e: ClickParam) => {
+        console.log(e);
+        if (e && e.key === "logout") {
+            this.logout();
+        } else if (e && e.key === "home") {
+            this.props.history.push("/");
+        } else {
+            this.props.history.push("/" + e.key);
+        }
+    };
+
     private logout(): void {
         this.props.userStore.logout();
 
-        this.props.history.push('/');
-    }
-
-    public render(): JSX.Element {
-        return (
-            <Header>
-                {!this.props.userStore.isLoggedIn ? (
-                    <>
-                        <Button type="primary" href="/login">Login</Button>
-                        <Button type="primary" href="/register">Register</Button>
-                    </>
-                ) : <>
-                        <Button type="primary" onClick={(): void => this.logout()}>Logout</Button>
-                        <Button type="primary" href="/addCar">Add Car</Button>
-                        <Button type="primary" href="/favoriteCars">Favorite Cars</Button>
-                    </>}
-
-            </Header>
-        );
+        this.props.history.push("/");
     }
 }
 
-export default withRouter(Navbar)
+export default withRouter(Navbar);
