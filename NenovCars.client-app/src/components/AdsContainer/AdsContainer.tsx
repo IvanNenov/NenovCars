@@ -2,12 +2,14 @@ import * as React from 'react';
 import { IAdStore } from '../../stores/AdStore/AdStore';
 import Ad from './Add/Ad';
 import { List, Row, Col } from 'antd';
-import './AdsContainer.css';
 import { inject, observer } from 'mobx-react';
 import { ICarAd } from './interfaces/ICarAd';
+import './AdsContainer.css';
+import { IUiStore } from '../../stores/UiStore/UiStore';
 
 interface AdsContainerProps {
     adStore?: IAdStore;
+    uiStore?: IUiStore;
     carsList?: ICarAd[] 
 }
 
@@ -17,6 +19,7 @@ interface AdsContainerState {
 }
 
 @inject('adStore')
+@inject('uiStore')
 @observer
 export default class AdsContainer extends React.Component<AdsContainerProps, AdsContainerState>{
     public state: AdsContainerState = {

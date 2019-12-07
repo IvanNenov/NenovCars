@@ -1,0 +1,56 @@
+.n-ad-image {
+    width: 210px;
+    height: 160px;
+    margin: -2.5%;
+}
+
+.n-image-col {
+    margin: -2%;
+    padding-right: 2%;
+}
+
+.n-car-info {
+    width: 300px;
+    word-wrap: break-word;
+    margin-left: 0.5%;
+}
+
+.n-car-title {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.n-description-container {
+    height: 80px;
+    overflow: hidden;
+    margin-top: -3%;
+}
+
+.n-car-description {
+    font-size: 0.7vw;
+    height: inherit;
+}
+
+.n-car-margin-top {
+    margin-top: -2%;
+}
+
+.n-car-price {
+    margin-left: 10%;
+    width: 50px;
+}
+
+.n-fav-button {
+    margin-left: 8%;
+    margin-top: 4%;
+}
+
+.n-fav-button:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.n-car-year {
+    width: 50px;
+}
