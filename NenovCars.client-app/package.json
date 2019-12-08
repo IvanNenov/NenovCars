@@ -9,16 +9,19 @@
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
     "@types/react-router-dom": "^5.1.2",
+    "@types/toastr": "^2.1.37",
     "antd": "^3.26.0",
     "axios": "^0.19.0",
+    "cloudinary-react": "^1.2.1",
     "mdbreact": "^4.23.0",
+    "mobx": "5.13.0",
+    "mobx-react": "6.1.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
-    "typescript": "3.7.2",
-    "mobx": "5.13.0",
-    "mobx-react": "6.1.1"
+    "toastr": "^2.1.4",
+    "typescript": "3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",

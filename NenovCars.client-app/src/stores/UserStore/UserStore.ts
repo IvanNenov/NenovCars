@@ -11,7 +11,7 @@ export interface IUserStore {
     register(user: IUserRegister): Promise<boolean>;
 
     setIsUserAuthenticated(isLoggedIn: boolean): void;
-    logout(): void;
+    logout(): boolean;
 }
 
 export class UserStore implements IUserStore {
@@ -25,11 +25,15 @@ export class UserStore implements IUserStore {
 
     public setApiUrl(url: string): void {}
 
-    public logout(): void {
+    public logout(): boolean {
         if (this.isUserAuthenticated) {
             this.isLoggedIn = false;
             this._authService.logout();
+
+            return true;
         }
+
+        return false;
     }
 
     public login(user: IUserLogin): Promise<boolean> {

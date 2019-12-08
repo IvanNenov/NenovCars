@@ -2,6 +2,7 @@ import Axios from 'axios';
 import IUserRegister from '../../components/User/interfaces/IUserRegister';
 import IUserLogin from '../../components/User/interfaces/IUserLogin';
 import Auth from '../../helpers/Auth/Auth';
+import toastr from 'toastr';
 
 export default class AuthService {
     public logout(): void {
@@ -29,6 +30,7 @@ export default class AuthService {
 
     public async login(user: IUserLogin): Promise<boolean> {
         let isLogged: boolean = false;
+
         try {
             let result = await Axios.post('api/User/Login', user);
 
@@ -48,7 +50,9 @@ export default class AuthService {
                 isLogged = false;
             }
         } catch (error) {
-            console.log(error);
+            setTimeout(() => {
+                toastr.error('Username or password is incorect!');
+            }, 300);
         }
 
         return isLogged;
