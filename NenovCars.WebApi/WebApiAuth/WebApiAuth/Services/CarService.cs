@@ -281,7 +281,6 @@
             var cars = new List<CarViewModel>();
             foreach (var ad in adsForCurrentUser)
             {
-               
                 cars.Add(new CarViewModel
                 {
                     Id = ad.Id,
@@ -311,7 +310,6 @@
 
         public int GetMyAdsCount(ApplicationUser user)
         {
-
             return this.context.Cars
                 .Where(x => x.ApplicationUserId == user.Id)
                 .Count();
@@ -325,7 +323,7 @@
             }
 
             var ad = await this.context.Cars.FirstOrDefaultAsync(x => x.Id == adId);
-            if(ad == null)
+            if (ad == null)
             {
                 return false;
             }
@@ -340,7 +338,47 @@
 
             var isSuccessfully = await this.context.SaveChangesAsync();
 
-            if(isSuccessfully >= 1)
+            if (isSuccessfully >= 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> UpdateAd(EditCarViewModel ad, string id)
+        {
+            if (ad == null)
+            {
+                return false;
+            }
+
+            var oldAd = await this.context.Cars.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (ad == null)
+            {
+                return false;
+            }
+
+            oldAd.AdTitle = ad.AdTitle;
+            oldAd.Brand = ad.Brand;
+            oldAd.ImageUrl = ad.ImageUrl;
+            oldAd.Model = ad.Model;
+            oldAd.Hp = ad.Hp;
+            oldAd.Fuel = Enum.Parse<Fuel>(ad.Fuel);
+            oldAd.YearOfProduction = ad.YearOfProduction;
+            oldAd.Color = ad.Color;
+            oldAd.Transmission = Enum.Parse<Transmission>(ad.Transmission);
+            oldAd.VehicleType = Enum.Parse<VehicleType>(ad.VehicleType);
+            oldAd.Price = ad.Price;
+            oldAd.Kilometre = ad.Kilometre;
+            oldAd.Description = ad.Description;
+
+            this.context.Cars.Update(oldAd);
+
+            var isSuccesfully = await this.context.SaveChangesAsync();
+
+            if (isSuccesfully >= 1)
             {
                 return true;
             }

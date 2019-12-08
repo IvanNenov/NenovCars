@@ -1,12 +1,12 @@
 ﻿namespace WebApiAuth.ViewModels.Car
 {
-    public class AddCarViewModel
+    public class EditCarViewModel
     {
-        public string CarBrand { get; set; }
+        public string Brand { get; set; }
 
         public string ImageUrl { get; set; }
 
-        public string CarModel { get; set; }
+        public string Model { get; set; }
 
         public string Hp { get; set; }
 

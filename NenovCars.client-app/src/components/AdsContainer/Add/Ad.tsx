@@ -98,14 +98,10 @@ class Ad extends React.Component<AdProps & RouteComponentProps, AdState> {
                             {Auth.isUserAuthenticated() && this.props.uiStore.isMyAdsAdsOpen && (
                                 <>
                                     <div
-                                        onClick={async (): Promise<void> => {
-                                            let isOperationSucceeded = await this.props.adStore.removeFromFavorite(this.props.ad.id);
+                                        onClick={(): void => {
+                                            this.props.adStore.setAdToEdit(this.props.ad);
 
-                                            if (isOperationSucceeded) {
-                                                setTimeout(() => {
-                                                    toastr.success('Removed from your favorites');
-                                                }, 300);
-                                            }
+                                            this.props.history.push('/edit-ad')
                                         }}
                                     >
                                         <Icon style={{ width: '2em', height: '2em' }} type="edit" theme="twoTone" />

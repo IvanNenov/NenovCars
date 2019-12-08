@@ -27,6 +27,6 @@
 
         Task<bool> RemoveAd(string adId);
 
-        //Task<bool> UpdateAd()
+        Task<bool> UpdateAd(EditCarViewModel ad, string id);
     }
 }

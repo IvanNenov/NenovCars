@@ -3,6 +3,7 @@ import { IAllCarsContainer } from '../../components/AdsContainer/interfaces/IAll
 import Auth from '../../helpers/Auth/Auth';
 import { ICarAdInput } from '../../components/CreateAd/interfaces/ICarAdInput';
 import toastr from 'toastr';
+import { ICarAd } from '../../components/AdsContainer/interfaces/ICarAd';
 
 export default class AdService {
     public async getAllCars(page: string): Promise<IAllCarsContainer> {
@@ -132,12 +133,31 @@ export default class AdService {
             }
         };
 
-        let userId = Auth.getCurrentUserId();
-
         let isSuccessful: boolean = false;
 
         try {
             let result = await Axios.get('api/car/RemoveAd/' + adId, config);
+
+            isSuccessful = result.status === 200 ? true : false;
+        } catch (error) {
+            console.log(error);
+        }
+
+        return isSuccessful;
+    }
+
+    public async editAd(ad: ICarAd): Promise<boolean> {
+        let config = {
+            headers: {
+                Authorization: `Bearer ${Auth.getAuthToken()}`
+            }
+        };
+
+        let isSuccessful: boolean = false;
+
+        try {
+            let adId = ad.id;
+            let result = await Axios.post('api/car/UpdateAd/' + adId, ad, config);
 
             isSuccessful = result.status === 200 ? true : false;
         } catch (error) {

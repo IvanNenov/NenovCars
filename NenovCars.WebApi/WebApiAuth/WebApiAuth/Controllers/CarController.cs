@@ -257,5 +257,24 @@
 
             return this.Ok();
         }
+
+        [Authorize]
+        [HttpPost("[action]/{adId}")]
+        public async Task<ActionResult> UpdateAd(string adId, [FromBody]EditCarViewModel ad)
+        {
+            if (ad == null)
+            {
+                return this.BadRequest();
+            }
+
+            var isSuccessfully = await this._carService.UpdateAd(ad, adId);
+
+            if (!isSuccessfully)
+            {
+                return this.BadRequest();
+            }
+
+            return this.Ok();
+        }
     }
 }

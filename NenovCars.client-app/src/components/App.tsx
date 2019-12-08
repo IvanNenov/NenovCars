@@ -14,6 +14,7 @@ import FooterPage from './Footer/Footer';
 import NotFound from './NotFound/NotFound';
 import AdDetails from '../components/AdDetails/AdDetails';
 import MyAds from '../components/MyAds/MyAds';
+import EditAd from './EditAd/EditAd';
 import 'toastr/build/toastr.min.css';
 
 interface AppProps {
@@ -40,6 +41,7 @@ export default class App extends React.Component<AppProps, AppState> {
                         <Route path="/login" component={Login} />
                         <Route path="/register" component={Register} />
                         <Route path="/create-ad" component={CreateAd} />
+                        <Route path="/edit-ad" component={EditAd} />
                         <Route exact path="/favorites" component={FavoriteCars} />
                         <Route exact path="/ad-details" component={AdDetails} />
                         <Route exact path="/my-ads" component={MyAds} />

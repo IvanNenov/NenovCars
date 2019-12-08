@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, IAction } from 'mobx';
 import AdService from '../../services/AdService/AdService';
 import { IAllCarsContainer } from '../../components/AdsContainer/interfaces/IAllCarsContainer';
 import { ICarAdInput } from '../../components/CreateAd/interfaces/ICarAdInput';
@@ -10,6 +10,7 @@ export interface IAdStore {
     formDataContainer: FormData[];
     adDetails: ICarAd;
     myAds: IAllCarsContainer;
+    adToEdit: ICarAd;
 
     getAllCars(page: string): Promise<void>;
     getFavoriteCars(page: string): Promise<void>;
@@ -20,6 +21,8 @@ export interface IAdStore {
     setAdDetailsItem(ad: ICarAd): void;
     getMyAds(page: string): Promise<void>;
     removeAd(adId: string): Promise<boolean>;
+    setAdToEdit(ad: ICarAd): void;
+    editAd(edittedAd: ICarAd): Promise<boolean>;
 }
 
 export class AdStore implements IAdStore {
@@ -30,6 +33,7 @@ export class AdStore implements IAdStore {
     @observable public formDataContainer: FormData[] = new Array<FormData>();
     @observable public adDetails: ICarAd = null;
     @observable public myAds: IAllCarsContainer = null;
+    @observable public adToEdit: ICarAd = null;
 
     public constructor(adService: AdService) {
         this._adService = adService;
@@ -91,6 +95,21 @@ export class AdStore implements IAdStore {
     public async removeAd(adId: string): Promise<boolean> {
         if (adId) {
             return await this._adService.removeAd(adId);
+        }
+
+        return false;
+    }
+
+    @action
+    public setAdToEdit(ad: ICarAd): void {
+        if (ad) {
+            this.adToEdit = ad;
+        }
+    }
+
+    public async editAd(edittedAd: ICarAd): Promise<boolean> {
+        if (edittedAd) {
+            return this._adService.editAd(edittedAd);
         }
 
         return false;
