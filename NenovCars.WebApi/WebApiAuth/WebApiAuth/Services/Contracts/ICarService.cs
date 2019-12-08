@@ -20,5 +20,13 @@
         int GetAdsCount();
 
         Task<ICollection<CarViewModel>> GetAll(int toSkip, int pageSize);
+
+        Task<ICollection<CarViewModel>> GetMyAds(int toSkip, int pageSize, ApplicationUser user);
+
+        int GetMyAdsCount(ApplicationUser user);
+
+        Task<bool> RemoveAd(string adId);
+
+        //Task<bool> UpdateAd()
     }
 }

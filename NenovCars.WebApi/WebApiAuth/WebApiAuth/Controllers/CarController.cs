@@ -1,9 +1,9 @@
 ﻿namespace WebApiAuth.Controllers
 {
-    using System;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Threading.Tasks;
     using WebApiAuth.Data.Models.User;
     using WebApiAuth.Services.Contracts;
@@ -26,7 +26,7 @@
         [HttpPost("[action]")]
         public async Task<ActionResult> AddCar([FromBody] AddCarViewModel carAd)
         {
-            if(carAd == null)
+            if (carAd == null)
             {
                 return this.BadRequest("The input model cannot be null");
             }
@@ -38,14 +38,14 @@
             }
 
             var user = await this.userManager.FindByIdAsync(userId);
-            if(user == null)
+            if (user == null)
             {
                 return this.Unauthorized();
             }
 
             var isSuccessful = await this._carService.CreateCar(carAd, user);
 
-            if(!isSuccessful)
+            if (!isSuccessful)
             {
                 return this.BadRequest();
             }
@@ -107,7 +107,7 @@
 
             if (!isOperationSucceeded)
             {
-                return this.BadRequest("This ad is already in the favorite list.");
+                return this.BadRequest("This ad is already in the favorite list!");
             }
 
             return this.Ok(isOperationSucceeded);
@@ -189,6 +189,73 @@
             }
 
             return this.Ok(viewModel);
+        }
+
+        [Authorize]
+        [HttpGet("[action]/{userId}/{currentPage}")]
+        public async Task<ActionResult> GetMyAds(string userId, string currentPage)
+        {
+            var isValidPage = int.TryParse(currentPage, out int page);
+            if (!isValidPage)
+            {
+                page = 1;
+            }
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return this.BadRequest("Invalid user id");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return this.Unauthorized();
+            }
+
+            var pageSize = 5;
+            var skip = (page - 1) * pageSize;
+
+            double totalPageCount;
+
+            var myAds = await this._carService
+                .GetMyAds(skip, pageSize, user)
+                .ConfigureAwait(false);
+
+            totalPageCount = Math.Ceiling((double)this._carService.GetMyAdsCount(user) / pageSize);
+
+            var viewModel = new ListOfAllCarsViewModel()
+            {
+                AllCars = myAds,
+                CurrentPage = page.ToString(),
+                PageSize = pageSize.ToString(),
+                TotalPagesCount = totalPageCount.ToString()
+            };
+
+            if (myAds == null || viewModel == null)
+            {
+                return this.BadRequest();
+            }
+
+            return this.Ok(viewModel);
+        }
+
+        [Authorize]
+        [HttpGet("[action]/{adId}")]
+        public async Task<ActionResult> RemoveAd(string adId)
+        {
+            if (string.IsNullOrWhiteSpace(adId))
+            {
+                return this.BadRequest("The ad id is invalid!");
+            }
+
+            var isSuccessfully = await this._carService.RemoveAd(adId);
+
+            if (!isSuccessfully)
+            {
+                return this.BadRequest();
+            }
+
+            return this.Ok();
         }
     }
 }

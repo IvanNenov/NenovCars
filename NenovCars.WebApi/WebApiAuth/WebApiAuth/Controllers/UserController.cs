@@ -80,7 +80,7 @@ namespace WebApiAuth.Controllers
             }
             else
             {
-                return this.BadRequest(new { message = "Username or password is incorrect." });
+                return this.BadRequest("Username or password is incorrect.");
             }
         }
     }

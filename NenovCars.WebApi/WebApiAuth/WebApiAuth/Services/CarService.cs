@@ -61,6 +61,7 @@
         public async Task<ICollection<CarViewModel>> GetAll(int toSkip, int pageSize)
         {
             var listOfAllCars = await this.context.Cars
+                .OrderByDescending(x => x.CreatedOn)
                 .Skip(toSkip)
                 .Take(pageSize)
                 .Select(x => new CarViewModel
@@ -87,8 +88,7 @@
 
         public int GetFavroiteAdsCount(ApplicationUser user)
         {
-            return this.context.Cars
-                .Include(x => x.UserFavoriteCars)
+            return this.context.UserFavoriteCars
                 .Where(x => x.ApplicationUserId == user.Id)
                 .Count();
         }
@@ -154,9 +154,35 @@
             return cars;
         }
 
-        public Task<bool> RemoveFromFavorite(string id, ApplicationUser user)
+        public async Task<bool> RemoveFromFavorite(string id, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                return false;
+            }
+
+            if (user == null)
+            {
+                return false;
+            }
+            var userFavoriteAd = await this.context.UserFavoriteCars
+                .Include(x => x.Car)
+                .FirstOrDefaultAsync(x => x.CarId == id);
+
+            if (userFavoriteAd == null)
+            {
+                return false;
+            }
+
+            this.context.Remove(userFavoriteAd);
+            var isSuccessful = await this.context.SaveChangesAsync();
+
+            if (isSuccessful > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> AddToFavorite(string id, ApplicationUser user)
@@ -217,6 +243,104 @@
             var isSuccessful = await this.context.SaveChangesAsync();
 
             if (isSuccessful > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<ICollection<CarViewModel>> GetMyAds(int toSkip, int pageSize, ApplicationUser user)
+        {
+            if (toSkip < 0)
+            {
+                return null;
+            }
+
+            if (pageSize <= 0)
+            {
+                return null;
+            }
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var adsForCurrentUser = await this.context.Cars
+                .Where(x => x.ApplicationUserId == user.Id)
+                .Skip(toSkip)
+                .Take(pageSize)
+                .ToListAsync();
+
+            if (adsForCurrentUser == null)
+            {
+                return null;
+            }
+
+            var cars = new List<CarViewModel>();
+            foreach (var ad in adsForCurrentUser)
+            {
+               
+                cars.Add(new CarViewModel
+                {
+                    Id = ad.Id,
+                    ImageUrl = ad.ImageUrl,
+                    Brand = ad.Brand,
+                    Fuel = ad.Fuel.ToString(),
+                    Hp = ad.Hp,
+                    Model = ad.Model,
+                    AdTitle = ad.AdTitle,
+                    Color = ad.Color,
+                    Description = ad.Description,
+                    Kilometre = ad.Kilometre,
+                    Price = ad.Price,
+                    Transmission = ad.Transmission.ToString(),
+                    VehicleType = ad.VehicleType.ToString(),
+                    YearOfProduction = ad.YearOfProduction
+                });
+            }
+
+            if (cars == null)
+            {
+                return null;
+            }
+
+            return cars;
+        }
+
+        public int GetMyAdsCount(ApplicationUser user)
+        {
+
+            return this.context.Cars
+                .Where(x => x.ApplicationUserId == user.Id)
+                .Count();
+        }
+
+        public async Task<bool> RemoveAd(string adId)
+        {
+            if (string.IsNullOrWhiteSpace(adId))
+            {
+                return false;
+            }
+
+            var ad = await this.context.Cars.FirstOrDefaultAsync(x => x.Id == adId);
+            if(ad == null)
+            {
+                return false;
+            }
+
+            var adsFromFavorite = await this.context.UserFavoriteCars
+                .Where(x => x.CarId == adId)
+                .ToListAsync();
+
+            this.context.UserFavoriteCars.RemoveRange(adsFromFavorite);
+
+            this.context.Cars.Remove(ad);
+
+            var isSuccessfully = await this.context.SaveChangesAsync();
+
+            if(isSuccessfully >= 1)
             {
                 return true;
             }
