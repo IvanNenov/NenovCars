@@ -4,23 +4,18 @@ import { IUserStore } from '../../stores/UserStore/UserStore';
 import { inject, observer } from 'mobx-react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ClickParam } from 'antd/lib/menu';
+import toastr from 'toastr'
 import './Navbar.css';
 
 interface NavbarProps {
     userStore?: IUserStore;
 }
 
-interface NavbarState {
-    isLoggedIn: boolean;
-}
+interface NavbarState {}
 
 @inject('userStore')
 @observer
 class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarState> {
-    public state: NavbarState = {
-        isLoggedIn: this.props.userStore.isUserAuthenticated
-    };
-
     public componentDidMount(): void {
         if (this.props.userStore.isUserAuthenticated) {
             this.props.userStore.setIsUserAuthenticated(this.props.userStore.isUserAuthenticated);
@@ -42,7 +37,7 @@ class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarSt
                     <Icon type="login" />
                     Login
                 </Menu.Item>
-                <Menu.Item key="create-add" hidden={!this.props.userStore.isLoggedIn}>
+                <Menu.Item key="create-ad" hidden={!this.props.userStore.isLoggedIn}>
                     <Icon type="car" />
                     Create Ad
                 </Menu.Item>
@@ -53,6 +48,10 @@ class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarSt
                 <Menu.Item className="n-nav-float-right" key="logout" hidden={!this.props.userStore.isLoggedIn}>
                     <Icon type="logout" />
                     Logout
+                </Menu.Item>
+                <Menu.Item className="n-nav-float-right" key="my-ads" hidden={!this.props.userStore.isLoggedIn}>
+                    <Icon type="car" />
+                    My Ads
                 </Menu.Item>
             </Menu>
         );
@@ -70,7 +69,13 @@ class Navbar extends React.Component<NavbarProps & RouteComponentProps, NavbarSt
     };
 
     private logout(): void {
-        this.props.userStore.logout();
+        let isLoggedOut = this.props.userStore.logout();
+
+        if(isLoggedOut) {
+            setTimeout(() => {
+                toastr.success("Successfully logged out")
+            }, 300);
+        }
 
         this.props.history.push('/');
     }

@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, Divider } from 'antd';
 import IUserLogin from '../interfaces/IUserLogin';
 import { RouteComponentProps } from 'react-router-dom';
 import { Col, Row } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { IUserStore } from '../../../stores/UserStore/UserStore';
 import Auth from '../../../helpers/Auth/Auth';
+import toastr from 'toastr'
 
 interface LoginProps {
     userStore?: IUserStore;
@@ -31,6 +32,18 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
     }
 
     private async handleSubmit(): Promise<void> {
+        if(this.state.password === '') {
+            setTimeout(() => {
+                toastr.error('Password cannot be empty!')
+            }, 300);
+        }
+
+        if(this.state.username === '') {
+            setTimeout(() => {
+                toastr.error('Username cannot be empty!')
+            }, 300);
+    }
+
         if (this.state.username !== '' && this.state.password !== '') {
             let userBody: IUserLogin = {
                 username: this.state.username,
@@ -40,6 +53,10 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
             let isLogged = await this.props.userStore.login(userBody);
 
             if (isLogged) {
+                setTimeout(() => {
+                    toastr.success("Successfully logged in!")
+                }, 300);
+
                 this.props.history.push('/');
                 this.props.userStore.setIsUserAuthenticated(true);
             }
@@ -62,6 +79,7 @@ export default class Login extends React.Component<LoginProps & RouteComponentPr
         console.log('LoginComponent render');
         return (
             <Row type="flex" justify="center">
+                <Divider>Login</Divider>
                 <Col>
                     <Form className="login-form">
                         <Form.Item>

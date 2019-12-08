@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, Divider } from 'antd';
 import IUserRegister from '../interfaces/IUserRegister';
 import { RouteComponentProps } from 'react-router-dom';
 import { Col, Row } from 'antd';
 import Auth from '../../../helpers/Auth/Auth';
 import { IUserStore } from '../../../stores/UserStore/UserStore';
 import { inject, observer } from 'mobx-react';
+import toastr from 'toastr'
 
 interface RegisterState {
     username: string;
@@ -45,6 +46,10 @@ export default class Register extends React.Component<RegisterProps & RouteCompo
             let isRegisterSucceeded = this.props.userStore.register(userBody);
 
             if (isRegisterSucceeded) {
+                setTimeout(() => {
+                    toastr.success("Successfully registered!")
+                }, 300);
+
                 this.props.history.push('/login');
             }
         }
@@ -77,6 +82,7 @@ export default class Register extends React.Component<RegisterProps & RouteCompo
     public render(): JSX.Element {
         return (
             <Row type="flex" justify="center">
+                <Divider>Register</Divider>
                 <Col>
                     <Form className="login-form">
                         <Form.Item>
