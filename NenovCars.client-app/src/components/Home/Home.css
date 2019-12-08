@@ -1,0 +1,38 @@
+.dark-translucent {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(10, 10, 10, 0.35)), url(/static/media/nenov-cars.c69184f6.png);
+    background-size: cover;
+    position: relative;
+    min-height: 350px;
+    padding-top: 60px;
+    padding-bottom: 20px;
+    background-repeat: no-repeat;
+}
+
+.dark-translucent::after {
+    position: absolute;
+}
+
+.n-home-title {
+    color: white;
+    text-align: center;
+    font-size: 32px;
+    font-family: initial;
+    margin-top: 3%;
+}
+
+.n-home-buttons {
+    text-align: center;
+}
+
+.n-home-second-btn {
+    margin-left: 1%;
+}
+
+.n-separator {
+    background: white;
+    background: linear-gradient(to right,rgba(255,255,255,0) 0,rgba(255,255,255,.5) 35%,rgba(255,255,255,.5) 70%,rgba(255,255,255,0) 100%);
+    width: 100%;
+    margin: 20px auto 15px;
+    position: relative;
+    height: 1px;
+}
