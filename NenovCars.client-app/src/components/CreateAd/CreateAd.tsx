@@ -1,14 +1,22 @@
 import React from 'react';
-import { Form, Input, Button, Radio, Row, Col } from 'antd';
-import CarService from '../../services/Car/CarService';
+import { Form, Input, Button, Radio, Row, Col, Divider, Upload, Icon } from 'antd';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Auth from '../../helpers/Auth/Auth';
 import { RadioChangeEvent } from 'antd/lib/radio';
 import { ICarAdInput } from './interfaces/ICarAdInput';
+import { IAdStore } from '../../stores/AdStore/AdStore';
+import { inject, observer } from 'mobx-react';
+import TextArea from 'antd/lib/input/TextArea';
+import { UploadChangeParam } from 'antd/lib/upload';
+import { UploadFile } from 'antd/lib/upload/interface';
+import Axios from 'axios';
+import toastr from 'toastr';
 
-interface CarAddProps {}
+interface CreateAdProps {
+    adStore?: IAdStore;
+}
 
-interface CarAddState {
+interface CreateAdState {
     carBrand: string;
     carImage: string;
     carModel: string;
@@ -24,8 +32,41 @@ interface CarAddState {
     description: string;
 }
 
-class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddState> {
-    public state: CarAddState = {
+// const cloudName = `nenovcars`;
+// const cloudinaryConfig = {
+//     url: `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+//     cloundName: 'nenovcars'
+// };
+
+// const props = {
+//     name: 'file',
+//     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+//     headers: {
+//         authorization: 'authorization-text'
+//     },
+//     onChange(info: UploadChangeParam<UploadFile<FormData>>) {
+//         console.log(info);
+
+//         if (info && info.file && info.file.status != 'uploading' && (info.file.type == 'image/png' || info.file.type == 'image/jpeg')) {
+//             let formData = new FormData();
+
+//             formData.append('file', (info.file as any) as Blob);
+//             formData.append('tags', `codeinfuse, medium, gist`);
+//             formData.append('upload_preset', 'ulehch3i');
+//             formData.append('tags', `codeinfuse, medium, gist`);
+//             formData.append('api_key', '122536432112819');
+//             // formData.append("timestamp", (Date.now() / 1000) | 0);
+
+//             this.props.adStore.p;
+//         }
+//         // Axios.post(cloudinaryConfig.url);
+//     }
+// };
+
+@inject('adStore')
+@observer
+class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, CreateAdState> {
+    public state: CreateAdState = {
         carBrand: '',
         carImage: '',
         carModel: '',
@@ -93,7 +134,7 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
         });
     }
 
-    private onDescriptionChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    private onDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
         this.setState({
             description: event.currentTarget.value
         });
@@ -106,7 +147,6 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
     }
 
     private async handleSubmit(): Promise<void> {
-        let carService = new CarService();
         if (
             this.state.hp !== '' &&
             this.state.carImage !== '' &&
@@ -138,58 +178,104 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
                 description: this.state.description
             };
 
-            let isSuccessful = await carService.addCar(ad);
+            let isSuccessful = await this.props.adStore.createAd(ad);
 
             if (isSuccessful) {
+                setTimeout(() => {
+                    toastr.success('Successfully created ad!');
+                }, 300);
+
                 this.props.history.push('/');
             }
+            else{
+                setTimeout(() => {
+                    toastr.error('Please, fill all fields with correct data!');
+                }, 300);
+            }
+        } else {
+            setTimeout(() => {
+                toastr.error('Please, fill all fields!');
+            }, 300);
         }
     }
-    //fuel
-    //transmission
-    // vehicleType: '',
+
+    // private onImageUpload = async (info: UploadChangeParam<UploadFile<any>>): Promise<void> => {
+    //     let formData = new FormData();
+
+    //     if (info && info.file && info.file.status != 'uploading' && (info.file.type == 'image/png' || info.file.type == 'image/jpeg')) {
+    //         let date = (Date.now() / 1000) | 0;
+    //         formData.append('file', (info.file as any) as Blob);
+    //         // formData.append('tags', `codeinfuse, medium, gist`);
+    //         formData.append('upload_preset', 'ulehch3i');
+    //         formData.append('tags', `codeinfuse, medium, gist`);
+    //         formData.append('api_key', '122536432112819');
+    //         formData.append('timestamp', date.toString());
+
+    //         this.props.adStore.addToFormDataContainer(formData);
+    //     }
+
+    //     if (formData) {
+    //         let config = {
+    //             headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    //         };
+
+    //         let result = await Axios.post(cloudinaryConfig.url, formData, config);
+
+    //         console.log(result);
+    //     }
+    // };
 
     public render() {
         return (
-            <Row type="flex" justify="center">
-                <Col>
-                    <Form className="login-form">
-                        <Form.Item>
-                            <Input
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.carBrandInputChange(event)}
-                                placeholder="Car brand"
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Input
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.carModelInputChange(event)}
-                                placeholder="Car model"
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Input
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onHpChange(event)}
-                                placeholder="Horse power"
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Input
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onAdTitleChange(event)}
-                                placeholder="Title"
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Input
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onYearOfProductionChange(event)}
-                                placeholder="Year"
-                            />
-                        </Form.Item>
-                        <Form.Item>
-                            <Input
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onColorChange(event)}
-                                placeholder="Color"
-                            />
-                        </Form.Item>
+            <>
+                <Row type="flex" justify="space-around">
+                    <Divider>Create Ad</Divider>
+                    <Col span={5}>
+                        {/* <Col offset={2} span={3}> */}
+                        <Form>
+                            <Form.Item>
+                                <Input
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.carBrandInputChange(event)}
+                                    placeholder="Car brand"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.carModelInputChange(event)}
+                                    placeholder="Car model"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onHpChange(event)}
+                                    placeholder="Horse power"
+                                />
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={5}>
+                        <Form>
+                            <Form.Item>
+                                <Input
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onAdTitleChange(event)}
+                                    placeholder="Title"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onYearOfProductionChange(event)}
+                                    placeholder="Year"
+                                />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onColorChange(event)}
+                                    placeholder="Color"
+                                />
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                    <Col span={5}>
                         <Form.Item>
                             <Input
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onPriceChange(event)}
@@ -197,25 +283,37 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
                             />
                         </Form.Item>
                         <Form.Item>
+                            <TextArea
+                                style={{ resize: 'none' }}
+                                rows={4}
+                                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => this.onDescriptionChange(event)}
+                                placeholder="Description"
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col span={5}>
+                        <Form.Item>
                             <Input
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onKmChange(event)}
                                 placeholder="Mileage"
                             />
                         </Form.Item>
-                        <Form.Item>
-                            <Input
-                                onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onDescriptionChange(event)}
-                                placeholder="Description"
-                            />
-                        </Form.Item>
+
                         <Form.Item>
                             <Input
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onImageChange(event)}
                                 placeholder="Image url"
                             />
+                            {/* <Upload onChange={async (info: UploadChangeParam<UploadFile<any>>) => await this.onImageUpload(info)}>
+                                <Upload onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {this.onImageChange(ienfo)}}>
+                                <Button>
+                                    <Icon type="upload" /> Click to Upload
+                                </Button>
+                            </Upload> */}
                         </Form.Item>
+                    </Col>
+                    <Col span={5}>
                         <Row>
-                            <p>Fuel</p>
                             <Radio.Group
                                 name="Fuel"
                                 defaultValue={'Diesel'}
@@ -227,7 +325,6 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
                             </Radio.Group>
                         </Row>
                         <Row>
-                            <p>Transmission</p>
                             <Radio.Group
                                 name="Transmission"
                                 defaultValue={'Automatic'}
@@ -242,7 +339,6 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
                             </Radio.Group>
                         </Row>
                         <Row>
-                            <p>Vehicle</p>
                             <Radio.Group
                                 name="Vehicle"
                                 defaultValue={'Car'}
@@ -258,6 +354,10 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
                                 <Radio value={'Motorcycle'}>Motorcycle</Radio>
                             </Radio.Group>
                         </Row>
+                    </Col>
+                </Row>
+                <Row type="flex" justify="center">
+                    <Form className="login-form">
                         <Form.Item>
                             <Button
                                 type="primary"
@@ -268,10 +368,10 @@ class CarAd extends React.Component<CarAddProps & RouteComponentProps, CarAddSta
                             </Button>
                         </Form.Item>
                     </Form>
-                </Col>
-            </Row>
+                </Row>
+            </>
         );
     }
 }
 
-export default withRouter(CarAd);
+export default withRouter(CreateAd);
