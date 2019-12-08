@@ -1,0 +1,57 @@
+.n-ad-card {
+    width: 850px;
+    margin-top: 16px;
+}
+
+.n-ad-details-container {
+    text-align: right;
+}
+
+.n-ad-details-image {
+    width: 410px;
+    height: 300px;
+    /* margin: -2.5%; */
+}
+
+.n-ad-details {
+    margin-left: 5%;
+}
+
+.n-ad-title {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.n-ad-details-title {
+    font-size: 16px;
+}
+
+.n-ad-details-info {
+    font-weight: bold;
+}
+
+.n-ad-price-container {
+    text-align: right;
+}
+
+.n-ad-price {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.n-ad-price-title {
+    font-size: 21px;
+}
+
+.n-ad-description-container {
+    font-size: 0.7vw;
+    height: inherit;
+    margin-top: 3%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.n-ad-description-title {
+    font-size: 16px;
+    font-weight: bold;
+}
