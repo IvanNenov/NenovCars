@@ -4,6 +4,7 @@ import { IAdStore } from '../../stores/AdStore/AdStore';
 import { inject, observer } from 'mobx-react';
 import LoadingIndicatior from '../LoadingIndicator/LoadingIndicator';
 import { IUiStore } from '../../stores/UiStore/UiStore';
+import { Divider, Pagination, Col, Row } from 'antd';
 
 interface FavoriteCarsProps {
     adStore?: IAdStore;
@@ -40,6 +41,51 @@ export default class FavoriteCars extends React.Component<FavoriteCarsProps, Fav
     }
 
     public render() {
-        return <>{this.state.isAdsLoading ? <LoadingIndicatior /> : <AdsContainer carsList={this.props.adStore.favoriteCars.allCars} />}</>;
+        return (
+            <>
+                {this.state.isAdsLoading ? (
+                    <LoadingIndicatior />
+                ) : (
+                    <>
+                        <Row type="flex" justify="center">
+                            <Col>
+                                <div className="n-recently-added">
+                                    <Divider>My Favorite Cars</Divider>
+                                </div>
+                                {this.props.adStore.favoriteCars &&
+                                    this.props.adStore.favoriteCars.allCars &&
+                                    this.props.adStore.favoriteCars.allCars.length >= 1 && (
+                                        <Pagination
+                                            onChange={this.onPageChange}
+                                            current={this.state.page}
+                                            defaultCurrent={this.state.page}
+                                            total={parseInt(this.props.adStore.favoriteCars.totalPagesCount) * 10}
+                                        />
+                                    )}
+                                <AdsContainer carsList={this.props.adStore.favoriteCars.allCars} />
+                                {this.props.adStore.favoriteCars &&
+                                    this.props.adStore.favoriteCars.allCars &&
+                                    this.props.adStore.favoriteCars.allCars.length >= 1 && (
+                                        <Pagination
+                                            onChange={this.onPageChange}
+                                            current={this.state.page}
+                                            defaultCurrent={this.state.page}
+                                            total={parseInt(this.props.adStore.favoriteCars.totalPagesCount) * 10}
+                                        />
+                                    )}
+                            </Col>
+                        </Row>
+                    </>
+                )}
+            </>
+        );
     }
+
+    private onPageChange = (page: number, pageSize?: number): void => {
+        this.setState({
+            page: page
+        });
+
+        this.props.adStore.getFavoriteCars(page.toString());
+    };
 }
