@@ -166,4 +166,18 @@ export default class AdService {
 
         return isSuccessful;
     }
+
+    public async search(firstParam: string, secondParam?: string): Promise<IAllCarsContainer> {
+        let viewModel: IAllCarsContainer;
+
+        try {
+            let result = await Axios.get(`api/search/Search/${firstParam}/${secondParam}`);
+
+            viewModel = result.data;
+        } catch (error) {
+            console.log(error);
+        }
+
+        return viewModel;
+    }
 }

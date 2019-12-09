@@ -5,9 +5,9 @@ import { IAdStore } from '../../stores/AdStore/AdStore';
 import LoadingIndicatior from '../LoadingIndicator/LoadingIndicator';
 import { IUiStore } from '../../stores/UiStore/UiStore';
 import { Divider, Pagination, Row, Col, Button } from 'antd';
-import './Home.css';
 import { IUserStore } from '../../stores/UserStore/UserStore';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import './Home.css';
 
 interface HomeProps {
     adStore?: IAdStore;
@@ -58,16 +58,35 @@ class Home extends React.Component<HomeProps & RouteComponentProps, HomeState> {
                             <div className="n-home-buttons">
                                 {this.props.userStore.isLoggedIn ? (
                                     <>
-                                        <Button ghost onClick={(): void => this.props.history.push('/create-ad')}>Create Ad</Button>
-                                        <Button className="n-home-second-btn" ghost onClick={(): void => this.props.history.push('/search')}>
+                                        <Button ghost onClick={(): void => this.props.history.push('/create-ad')}>
+                                            Create Ad
+                                        </Button>
+                                        <Button
+                                            className="n-home-second-btn"
+                                            ghost
+                                            onClick={(): void => this.props.history.push('/search')}
+                                        >
                                             Browse
                                         </Button>
                                     </>
                                 ) : (
                                     <>
-                                        <Button ghost onClick={(): void => this.props.history.push('/login')}>Login</Button>
-                                        <Button className="n-home-second-btn" ghost onClick={(): void => this.props.history.push('/register')}>
+                                        <Button ghost onClick={(): void => this.props.history.push('/login')}>
+                                            Login
+                                        </Button>
+                                        <Button
+                                            className="n-home-second-btn"
+                                            ghost
+                                            onClick={(): void => this.props.history.push('/register')}
+                                        >
                                             Register
+                                        </Button>
+                                        <Button
+                                            className="n-home-second-btn"
+                                            ghost
+                                            onClick={(): void => this.props.history.push('/search')}
+                                        >
+                                            Browse
                                         </Button>
                                     </>
                                 )}

@@ -1,5 +1,5 @@
 .dark-translucent {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(10, 10, 10, 0.35)), url(/static/media/nenov-cars.c69184f6.png);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(10, 10, 10, 0.35)), url(../../assets//img//nenov-cars.png);
     background-size: cover;
     position: relative;
     min-height: 350px;
@@ -35,9 +35,9 @@
         rgba(255, 255, 255, 0) 0,
         rgba(255, 255, 255, 0.5) 35%,
         rgba(255, 255, 255, 0.5) 70%,
-        rgba(255, 255, 255, 0) 100%,
-        url(../../assets//img//nenov-cars.png)
+        rgba(255, 255, 255, 0) 100%
     );
+
     width: 100%;
     margin: 20px auto 15px;
     position: relative;

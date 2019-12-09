@@ -11,6 +11,7 @@ export interface IAdStore {
     adDetails: ICarAd;
     myAds: IAllCarsContainer;
     adToEdit: ICarAd;
+    searchResults: IAllCarsContainer;
 
     getAllCars(page: string): Promise<void>;
     getFavoriteCars(page: string): Promise<void>;
@@ -23,6 +24,7 @@ export interface IAdStore {
     removeAd(adId: string): Promise<boolean>;
     setAdToEdit(ad: ICarAd): void;
     editAd(edittedAd: ICarAd): Promise<boolean>;
+    getSearchResult(firstParam: string, secondParam?: string): Promise<void>;
 }
 
 export class AdStore implements IAdStore {
@@ -34,6 +36,7 @@ export class AdStore implements IAdStore {
     @observable public adDetails: ICarAd = null;
     @observable public myAds: IAllCarsContainer = null;
     @observable public adToEdit: ICarAd = null;
+    @observable public searchResults: IAllCarsContainer = null;
 
     public constructor(adService: AdService) {
         this._adService = adService;
@@ -113,5 +116,12 @@ export class AdStore implements IAdStore {
         }
 
         return false;
+    }
+
+    @action
+    public async getSearchResult(firstParam: string, secondParam?: string): Promise<void> {
+        if (firstParam) {
+            this.searchResults = await this._adService.search(firstParam, secondParam);
+        }
     }
 }

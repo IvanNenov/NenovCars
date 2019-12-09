@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Radio, Row, Col, Divider, Upload, Icon } from 'antd';
+import { Form, Input, Button, Radio, Row, Col, Divider } from 'antd';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Auth from '../../helpers/Auth/Auth';
 import { RadioChangeEvent } from 'antd/lib/radio';
@@ -7,9 +7,6 @@ import { ICarAdInput } from './interfaces/ICarAdInput';
 import { IAdStore } from '../../stores/AdStore/AdStore';
 import { inject, observer } from 'mobx-react';
 import TextArea from 'antd/lib/input/TextArea';
-import { UploadChangeParam } from 'antd/lib/upload';
-import { UploadFile } from 'antd/lib/upload/interface';
-import Axios from 'axios';
 import toastr from 'toastr';
 
 interface CreateAdProps {
@@ -31,37 +28,6 @@ interface CreateAdState {
     kilometre: string;
     description: string;
 }
-
-// const cloudName = `nenovcars`;
-// const cloudinaryConfig = {
-//     url: `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
-//     cloundName: 'nenovcars'
-// };
-
-// const props = {
-//     name: 'file',
-//     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-//     headers: {
-//         authorization: 'authorization-text'
-//     },
-//     onChange(info: UploadChangeParam<UploadFile<FormData>>) {
-//         console.log(info);
-
-//         if (info && info.file && info.file.status != 'uploading' && (info.file.type == 'image/png' || info.file.type == 'image/jpeg')) {
-//             let formData = new FormData();
-
-//             formData.append('file', (info.file as any) as Blob);
-//             formData.append('tags', `codeinfuse, medium, gist`);
-//             formData.append('upload_preset', 'ulehch3i');
-//             formData.append('tags', `codeinfuse, medium, gist`);
-//             formData.append('api_key', '122536432112819');
-//             // formData.append("timestamp", (Date.now() / 1000) | 0);
-
-//             this.props.adStore.p;
-//         }
-//         // Axios.post(cloudinaryConfig.url);
-//     }
-// };
 
 @inject('adStore')
 @observer
@@ -117,11 +83,13 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
             adTitle: event.currentTarget.value
         });
     }
+
     private onColorChange(event: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({
             color: event.currentTarget.value
         });
     }
+    
     private onPriceChange(event: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({
             price: event.currentTarget.value
@@ -186,8 +154,7 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
                 }, 300);
 
                 this.props.history.push('/');
-            }
-            else{
+            } else {
                 setTimeout(() => {
                     toastr.error('Please, fill all fields with correct data!');
                 }, 300);
@@ -199,39 +166,12 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
         }
     }
 
-    // private onImageUpload = async (info: UploadChangeParam<UploadFile<any>>): Promise<void> => {
-    //     let formData = new FormData();
-
-    //     if (info && info.file && info.file.status != 'uploading' && (info.file.type == 'image/png' || info.file.type == 'image/jpeg')) {
-    //         let date = (Date.now() / 1000) | 0;
-    //         formData.append('file', (info.file as any) as Blob);
-    //         // formData.append('tags', `codeinfuse, medium, gist`);
-    //         formData.append('upload_preset', 'ulehch3i');
-    //         formData.append('tags', `codeinfuse, medium, gist`);
-    //         formData.append('api_key', '122536432112819');
-    //         formData.append('timestamp', date.toString());
-
-    //         this.props.adStore.addToFormDataContainer(formData);
-    //     }
-
-    //     if (formData) {
-    //         let config = {
-    //             headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    //         };
-
-    //         let result = await Axios.post(cloudinaryConfig.url, formData, config);
-
-    //         console.log(result);
-    //     }
-    // };
-
     public render() {
         return (
             <>
                 <Row type="flex" justify="space-around">
                     <Divider>Create Ad</Divider>
                     <Col span={5}>
-                        {/* <Col offset={2} span={3}> */}
                         <Form>
                             <Form.Item>
                                 <Input
@@ -304,12 +244,6 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onImageChange(event)}
                                 placeholder="Image url"
                             />
-                            {/* <Upload onChange={async (info: UploadChangeParam<UploadFile<any>>) => await this.onImageUpload(info)}>
-                                <Upload onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {this.onImageChange(ienfo)}}>
-                                <Button>
-                                    <Icon type="upload" /> Click to Upload
-                                </Button>
-                            </Upload> */}
                         </Form.Item>
                     </Col>
                     <Col span={5}>

@@ -15,6 +15,7 @@ import NotFound from './NotFound/NotFound';
 import AdDetails from '../components/AdDetails/AdDetails';
 import MyAds from '../components/MyAds/MyAds';
 import EditAd from './EditAd/EditAd';
+import SearchResult from './SearchResult/SearchResult';
 import 'toastr/build/toastr.min.css';
 
 interface AppProps {
@@ -45,9 +46,10 @@ export default class App extends React.Component<AppProps, AppState> {
                         <Route exact path="/favorites" component={FavoriteCars} />
                         <Route exact path="/ad-details" component={AdDetails} />
                         <Route exact path="/my-ads" component={MyAds} />
+                        <Route exact path="/search" component={SearchResult} />
                         <Route component={NotFound} />
                     </Switch>
-                    <FooterPage />
+                    {/* <FooterPage /> */}
                 </Layout>
             </div>
         );

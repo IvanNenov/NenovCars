@@ -18,8 +18,8 @@
 
         public CarController(ICarService carService, UserManager<ApplicationUser> userManager)
         {
-            this._carService = carService;
-            this.userManager = userManager;
+            this._carService = carService ?? throw new ArgumentNullException(nameof(carService));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         [Authorize]
