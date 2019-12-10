@@ -186,7 +186,7 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
                                 />
                             </Form.Item>
                             <Form.Item>
-                                <Input
+                                <Input type='number'
                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onHpChange(event)}
                                     placeholder="Horse power"
                                 />
@@ -202,7 +202,7 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
                                 />
                             </Form.Item>
                             <Form.Item>
-                                <Input
+                                <Input type='number'
                                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onYearOfProductionChange(event)}
                                     placeholder="Year"
                                 />
@@ -217,7 +217,7 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
                     </Col>
                     <Col span={5}>
                         <Form.Item>
-                            <Input
+                            <Input type='number'
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onPriceChange(event)}
                                 placeholder="Price"
                             />
@@ -233,7 +233,7 @@ class CreateAd extends React.Component<CreateAdProps & RouteComponentProps, Crea
                     </Col>
                     <Col span={5}>
                         <Form.Item>
-                            <Input
+                            <Input type='number'
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => this.onKmChange(event)}
                                 placeholder="Mileage"
                             />

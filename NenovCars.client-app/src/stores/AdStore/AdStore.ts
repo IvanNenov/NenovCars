@@ -97,7 +97,9 @@ export class AdStore implements IAdStore {
 
     public async removeAd(adId: string): Promise<boolean> {
         if (adId) {
-            return await this._adService.removeAd(adId);
+            let result = await this._adService.removeAd(adId);
+            this.getMyAds('1');
+            return result;
         }
 
         return false;
