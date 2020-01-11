@@ -94,7 +94,7 @@ namespace WebApiAuth.Services
 
             var finalQuery = Expression.Lambda<Func<Car, bool>>(body: body, parameters: param);
 
-            return finalQuery.Compile();
+            return finalQuery.Compile(); 
         }
 
         private static UnaryExpression GetValueExpression(string propertyName, string val, ParameterExpression param)
