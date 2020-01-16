@@ -1,7 +1,5 @@
 # NenovCars
 
-*A simple application developed for my exam in Software University in React course. 
-
 ## You can:
   *Login;
   *Register;
