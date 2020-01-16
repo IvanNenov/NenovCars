@@ -1,6 +1,6 @@
 <img src="https://github.com/IvanNenov/NenovCars/blob/master/NenovCars.client-app/src/assets/img/homePg.png"  />
 
-# You can:
+# You can
   Login;
   Register;
   Browse latest ads;
@@ -21,6 +21,6 @@
     AntDesign;
     Toastr;
 
-<img src="https://github.com/IvanNenov/NenovCars/blob/master/NenovCars.client-app/src/assets/img/bmwDetails.png"
+<img src="https://github.com/IvanNenov/NenovCars/blob/master/NenovCars.client-app/src/assets/img/bmwDetails.png" />
 
-<img src="https://github.com/IvanNenov/NenovCars/blob/master/NenovCars.client-app/src/assets/img/myAds.png"
+<img src="https://github.com/IvanNenov/NenovCars/blob/master/NenovCars.client-app/src/assets/img/myAds.png" />
